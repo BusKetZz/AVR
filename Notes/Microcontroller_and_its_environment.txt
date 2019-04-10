@@ -1,0 +1,33 @@
+******************************************
+*                                        *
+*   MICROCONTROLLER AND ITS ENVIRONMENT  *
+*                                        *
+******************************************
+
+Goals:
+    - how to properly connect microcontroller to the voltage source
+    - how to convert logic levels 
+    - how to connect peripherals working in different voltage domains to I2C main line
+    - how to properly connect external quartz
+
+
+1. Power connection
+   ================
+   Remember: If a microcontroller has a few GND/Vcc/AVcc pins, all of them must be connected
+             to the power.
+
+2. Decoupling capacitor
+   ====================
+   Remember: Connect to every power pin decoupling capacitor to avoid unpredictable problems
+             (capacitors should be placed as close pin's leg as possible).
+
+             Use ceramic (not electrolytic) capacitors with low impedance.
+
+
+3. Power filtering for analog part of the processor
+   ================================================
+   Remember: If you want to measure ADC precisely, it is good to use LC filter in AVcc line.
+             If not, it is not necessary, and AVcc can be treat as normal Vcc/GND line.
+
+
+
