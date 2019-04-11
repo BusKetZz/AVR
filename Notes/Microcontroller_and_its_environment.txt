@@ -13,12 +13,12 @@ Goals:
 
 1. Power connection
    ================
-   Remember: If a microcontroller has a few GND/Vcc/AVcc pins, all of them must be connected
+   @Remember: If a microcontroller has a few GND/Vcc/AVcc pins, all of them must be connected
              to the power.
 
 2. Decoupling capacitor
    ====================
-   Remember: Connect to every power pin decoupling capacitor to avoid unpredictable problems
+   @Remember: Connect to every power pin decoupling capacitor to avoid unpredictable problems
              (capacitors should be placed as close pin's leg as possible).
 
              Use ceramic (not electrolytic) capacitors with low impedance.
@@ -26,8 +26,47 @@ Goals:
 
 3. Power filtering for analog part of the processor
    ================================================
-   Remember: If you want to measure ADC precisely, it is good to use LC filter in AVcc line.
+   @Remember: If you want to measure ADC precisely, it is good to use LC filter in AVcc line.
              If not, it is not necessary, and AVcc can be treat as normal Vcc/GND line.
 
 
+4. Logic levels conversion between peripherals working in different voltage domains
+   ================================================================================
+   AVR microcontrollers are able to work with wide range of voltages: 1.8V - 5.5V.
+   It is good practice to adjust voltage level to the device with less flexible 
+   voltage tolerance, AVR probably will be able to adjust to this level either.
 
+
+5. Voltage vs frequency
+   ====================
+   General rule: The higher voltage, the higher frequency can be used.
+
+
+6. IO pins
+   =======
+   Every pin can be set as input (default state) or output.
+   Pin set as an input has a very high impedance (up to MΩ), thanks to this it is safe to 
+   connect signal in supply voltage range.
+   
+   @Remember: After processor reset, all of the IO pins are set as an input without pull-up 
+              or pull-down to Vcc or GND. If such a pin will be left and not connected, 
+              it will be in floating state (floats between high and low state).
+              It is not favorable, because it consums more power and weaken its resistance
+              to noises.
+
+              AVR pins are able to handle voltage up to Vcc + 0.6V.
+            
+
+7. Voltage divider
+   ===============
+   Voltage dividers are often used in situation, when input voltage with high amplitude is 
+   injected to the analog input of the processor, e.g. ADC input.
+
+
+8. Clock oscillator
+   ================
+   All of the AVR are configured in this way, that they start with the interal clock generator (RC generator).
+   The drawback of this RC generator is low stability. That is why, it is good to use external clock generator,
+   mostly it is quartz oscillator, which is much more stable.
+
+   @Remember: Connect capacitors to the external quartz oscillator, its capacitance ranges from 6-22 pF.
