@@ -70,3 +70,21 @@ Goals:
    mostly it is quartz oscillator, which is much more stable.
 
    @Remember: Connect capacitors to the external quartz oscillator, its capacitance ranges from 6-22 pF.
+
+   To properly calculate appropriate capacitances for the quartz oscillator, you need to consider:
+    - capacitances of input pins XTAL1 and XTAL2 (~4.44 pF)
+    - capacitance of a exit/housing (~0.27 pF)
+    - capacitance of lead traces (~1.00 pF)
+        
+    Sum of this capacitances (Cw) must be substracted from the 'load capacitance' of the quartz oscillator.
+    
+   @Formula: Ce = 2 * Cx - Cw      where:  Ce - outer capacitor value
+                                           Cx - recommended 'load capacitance' (set by the vendor)
+                                           Cw - sum of the XTAL1/2, exit/housing capacitances
+
+   @Rules:
+    - Do not provide any high frequency signals or high current traces near the quartz and capacitors
+    - It is good to provide large mass (ground) field around the generator
+    - Load capacitors should be placed as near quartz legs and the processor as possible
+    - Load capacitors should be stable (NPO or COG)
+    - Traces which connect quartz with XTAL1 and XTAL2 entries should be maximally apart from each other
