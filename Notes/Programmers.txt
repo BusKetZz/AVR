@@ -19,3 +19,28 @@ GOALS:
 
    @Remember: Connect all Vcc and GND pins to maintain stability.
               Connect GND of the programmer and processor together.
+
+
+2. Most common problems
+   ====================
+   1) In the case of ISP programming - processor 'locking' through the inadequate fusebit configuration
+   2) Incorrect frequency of the SCK signal (in the case of ISP programmers). The speed of the programming cannot be higher
+      than 1/4 of the clock speed.
+   3) Too long programmer-processor cable, it shoudl be 10-15cm long.
+   4) Incorrect signals connection.
+   5) Mismatched connection of the programmer to the SPI interface, not ISP.
+   6) Improper choice of the programmer of programming mode.
+   7) Blockade of the given interface.
+
+
+3. ISP programmer
+   ==============
+   ISP - In-system Programming Interface
+
+   pins: RESET, MISO, MOSI, SCK
+
+   @Remember: Connect Vcc pin of the programmer to the power source of the programmable system. It is used to power the 
+              level translators of the programmer.
+              Always connect mass of the connected peripherals together.
+
+   @Curio: Mass of the PC (its housing) has 115V potential relative to the ground.
