@@ -1,0 +1,21 @@
+******************************************************************************************************************************
+*                                                                                                                            *
+*                                                       PROGRAMMERS                                                          *
+*                                                                                                                            *
+******************************************************************************************************************************
+
+GOALS:  
+        - how to connect programmer with the microcontroller
+        - how to solve the most common problems concerning programming
+        - which programmer to choose
+
+
+1. Connection - general rules
+   ==========================
+   Do not add any other peripherals to the processor-programmer connection lines, and if you must, they should not load heavily 
+   the connection.
+   If input port of the processor is connected to the output port of the programmer, do not add more output ports to this input
+   port of the processor - there would be a conflict during programming a chip.
+
+   @Remember: Connect all Vcc and GND pins to maintain stability.
+              Connect GND of the programmer and processor together.
