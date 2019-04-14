@@ -42,5 +42,137 @@ GOALS:
    @Remember: Connect Vcc pin of the programmer to the power source of the programmable system. It is used to power the 
               level translators of the programmer.
               Always connect mass of the connected peripherals together.
+              Clock speed of the ISP cannot be higher than 1/4 of the processor clock speed.
 
    @Curio: Mass of the PC (its housing) has 115V potential relative to the ground.
+
+
+4. USBASP programmer
+   =================
+   Benefits:        - simplicity and cheapness
+                    - able to program processors with low clock speed (frequency of the SCK can be changed from 375kHz to 8kHz)
+
+   Disadvantages:   - some problems with USB connection to PC (it comes from emulation of USB interface)
+                    - cheap versions do not have voltage level translators and output buffers
+                    - they are able to work only with external applications like AVRDude
+                    - due to the lack of output buffers, connection cable between programmer and programmable system should not be 
+                      longer than 10cm
+
+
+5. JTAG programmer
+   ===============
+   Benefits:        - programming using JTAG is 3-4 times faster than ISP
+                    - the same applies to the EEPROM programming
+                    - it is possible to change fusebits defining source of the clock signal (JTAG interface himself generates the clock
+                      for the target device)
+                    - there is a possibility to connect peripherals in daisy-chain configuration, allowing multi-peripherals programming
+                      using one JTAG
+                    - it is possible to program other compatible systems with the JTAG standard implemented, e.g. FPGA
+                    - the most valueable property of the JTAG is the possibility of program debugging during working of the target electronic system
+
+   @Remember: In AVR microcontrollers with JTAG interface, JTAG is unlocked by default. JTAG uses some of the IO pins, which cannot be used 
+              in the program, unless JTAG iterface is blocked.
+              To block JTAG interface there are two option:
+              1) delete fusebit JTAGEN, which disables JTAG interface - MCU cannot be program by JTAG, only by ISP
+              2) block JTAG interface in the program    :   MCUCSR |= _BV(JTD); 
+
+
+6. AVR Dragon programmer
+   =====================
+   1) AVR Dragon is able to power target device with maximum current from the power connector not higher than 300mA
+   2) If the device has own power source, it is not proper to connect this power source to the Dragon power source
+   3) Dragon can power target device with the voltage in the range of 1.8-5.5V
+   4) To allow Dragon to control RESET line, there must be placed pull-up resistor with the resistance not less than 1kΩ
+   5) Power source of the Dragon should be turn on before power source of the target device
+   6) Vcc pin of the AVR Dragon can deliver up to 300mA / 5V
+   7) All of the interface which are not originaly soldered into the board (HV, PP) do not have voltage level converters, that is why
+      they are adjusted to voltage source of 5V - it should comes from AVR Dragon module
+
+    Signals and its purpose on 10-pins JTAG plug:
+    1) TCK  :   Output  :   Test Clock - clock signal for target device
+    2) GND  :   ------  :   Ground
+    3) TDO  :   Input   :   Test Data Output - data line from the target device
+    4) VTref:   Input   :   Target Reference Voltage - this pin should be connected to Vcc of target device, it is used to activation of level converters 
+                            of JTAG interface
+    5) TMS  :   Output  :   Test Mode Select - selection signal for target device
+    6) nRST :   I/O     :   It must be connected to RESET signal of target device, thanks to this JTAG can take control of the system. In target
+                            device, this signal should be of open collector/drain type
+    7) Vcc  :   ------  :   Pin not connected - Dragon cannot be powered from the target device and power target device either
+    8) nTRST:   Out (NC):   Signal not used on AVR platform
+    9) TDI  :   Output  :   Test Data Input - data line to target device
+   10) GND  :   ------  :   Ground
+
+
+7. debugWire interface
+   ===================
+   It is the simple interface used to programming and debugging in the system. Connection is established by three lines: GND, Vtref, RESET.
+
+   @Remember:
+   1) Microcontrollers which support dW, have dW interface turned off by default. To use dW, it is necessary to turn on it by changing fusebits setting
+      using ISP interface - set 'DWEN' configuration bit
+   2) Do not connect any additional elements to the RESET line, pull-up resistor should not have value less than 10kΩ and there should not be any capacitors
+   3) debugWire interface is only used to: system debugging, reading configuration bits and erasing memory, but it is not able to program the system
+
+
+8. Why 'elf' is better than 'hex'
+   ==============================
+   1) elf file has more complex structure than hex
+   2) elf file allows to store in one file: program code, fuse- and lockbits settings, data for EEPROM memory (.eep file) - such a 'whole' file is called 
+      'Production file'
+   3) it is much more easier to use complete elf file than alone hex file with all of the additional files to include separately
+
+
+9. A few processors programming and ISP interface
+   ==============================================
+   It is possible to program a few processor based on one board using one programmer, but there are some requirements to achieve:
+   1) RESET, MISO, MOSI signals from the programmer should be deliver to all of the processors
+   2) SCK signal must be separated - such a configuration allows to choose target processor by enabling SCK signal to its
+   3) RESET signal from the programmer must be in active state - thanks to this all of the pins of the processors are in high impedance state and do not
+                                                                 disturb transmission
+   4) Delivering SCK signal to target device allows to program only targeted processor, rest of them is inactive thanks to high impedance state of the pins
+
+   @Second option: It is possible to program a few processors using one 'big' main processor which programs other ones
+
+10. Daisy-chain JTAG mode
+    =====================
+    It is possible to program a few systems using one joint. In daisy-chain configuration of JTAG interface, TDI and TDO line are serial connected, additionaly
+    it allows to connect different systems (not only AVRs) which are compatible with JTAG.
+
+    @Remember: Using this configuration, remember to check whether given processor is free of problems with JTAG implementation.
+
+
+11. AVRDDUDE - application
+    ======================
+    AVRDUDE is the application called from terminal.
+
+    @Called parameters:
+    1) -p procesor      - it is the must have parameter, it determines type of processor connected to the programmer; to show the list of supported processors
+                          write: avrdude -p ?
+    2) -B period        - used to program with JTAG interface in ISP mode, it allows to set programming speed by adding SCK signal period (in miliseconds), 
+                          e.g. avrdude -B 1  :   it means that SCK is clocked with 1MHz signal
+    3) -c programmer    - it determines programmer type, which is supposed to use to microcontroller programming; to show the list of available programmers
+                          write: avrdude -c ?
+    4) -F               - it causes, that program does not verify system signature with the type given in -p parameter
+    5) -n               - it performs all operations but without physical record into system; it is useful in automation scripts testing
+    6) -0               - it performs calibration of the internal RC generator according to description attached in AVR053; calibration byte is saved in EEPROM
+                          at 0 address, from where it can be read and used to calibrate OSCCAL register; this operations precisely depicts frequency of RC oscillator
+    7) -U area:type:file[:format] - this option performs operation on a given area (write or read operation); 
+                                    'area' parameter can be: eeprom, flash, fuse, hfuse, lfuse, efuse, lock - it determines area subjected to given operation; 
+                                    'type' parameter can be: r - read, w - write, v - verify;
+                                    'file' parameter determines name of the file on which operation will be done (read, write or verify);
+                                    'format' parameter can be: i - IntelHEX, m - parameter will be direct value given in the call line (used to program fuse- and lockbits),
+                                                               e - elf
+
+    e.g. avrdude -p m88 -u -U flash:w:test.hex -U eeprom:w:test.eep -U efuse:w:0xff:m -U hfuse:w:0x89:m -U lfuse:w:0x2e:m
+
+    It causes programming of ATMega88 with files: test.hex and test.eep, which will be placed in FLASH and EEPROM memory of microcontroller, additionally fusebits 
+    will be set as: 0x2E89FF.
+
+    e.g. avrdude -c avrisp2 -P usb -p t26 -U falsh:w:main.hex:i
+
+    It causes programmin of ATTiny26 processor with main.hex file, using AVRISP mkII programmer, connected through USB port in ISP mode.
+
+    
+                                    
+                    
+
