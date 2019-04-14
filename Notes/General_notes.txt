@@ -1,0 +1,14 @@
+******************************************************************************************************************************
+*                                                                                                                            *
+*                                                    GENERAL NOTES                                                           *
+*                                                                                                                            *
+******************************************************************************************************************************
+
+1. 'P' letter in the name of the microcontroller
+   =============================================
+   What does 'P' mean in ATMega168P or ATMega328P?
+
+   'P' means that microcontroller was made in Picopower version. This version characterizes low power consumption, which is
+   recommended for devices powered by battery.
+
+   
