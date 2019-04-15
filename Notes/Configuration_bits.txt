@@ -1,0 +1,188 @@
+******************************************************************************************************************************
+*                                                                                                                            *
+*                                                    CONFIGURATION BITS                                                      *
+*                                                                                                                            *
+******************************************************************************************************************************
+
+@GOALS:     1) What are these 'configuration bits'
+            2) What is the usage of them and on what watchout
+            3) How to safely configure fusebits
+            4) How to handle in emergency situations 
+
+1. What are these 'configuration bits'
+   ===================================
+   Configuration bits: fuse- and lockbits, are special cells of EEPROM memory, mostly inaccessible from application layer,
+   which stores initial parameters of the microcontroller. Thanks to them, it is possible to configure some of MCU functions,
+   before main program from the FLASH memory will be started.
+   Lockbits allows access configuration to the different areas of FLASH memory and memory protection against unauthorized
+   reading by means of programmer.
+
+
+2. Lockbits
+   ========
+   Their main function is memory protection of the microcontroller against reading its content by means of programmer.
+   In fact, even lockbits are set, programmer will be able to read data, but not to acquire the source code of the program,
+   instead it will posses values in the range of 0x0 to 0xFF.
+
+
+3. Fusebits
+   ========
+   They allows to determine initial configuration of the processor after powering it on. 
+
+   @REMEMBER:
+   1) Their new configuration is applied only after exiting the programming mode.
+   2) 'programmed bit'   = 0
+   3) 'unprogrammed bit' = 1
+
+   Such a naming convention comes from the fact, that configuration bits are stored in non-volatile memory, which after reset
+   by default is set to 1. That is why, programming of this memory means setting bits to 0.
+
+   Configuration bits are stored in 1 to 3 bytes of non-volatile memory. Given bytes are named: Low, High and Extended.
+
+
+4. Fusebit JTAGEN
+   ==============
+   JTAGEN allows turning off JTAG interface. By default this fusebit is programmed (0), so JTAG interface is by default active.
+   Unlocking JTAG causes control taken on I/O pins related with that interface.
+   It is possible to block JTAG interface from the application layer, but after reseting MCU, JTAG is again active until program
+   block its again. Instruction which blocks JTAG is: MCUCSR |= _BV(JTD);
+
+
+5. Fusebits BODLEVEL
+   =================
+   They are responsible of system configuration which detects power failure. If the supply voltage of the MCU is below
+   threshold value set by fusebits BODLEVE, processor will be hold in reset state until voltage will return to proper value.
+   This system should be always turned on in the prepared system, it allows to avoid demaging cells of the EEPROM memory.
+
+
+6. Fusebit WDTON
+   =============
+   WDTON causes turning on the watchdog timer. 
+
+
+7. Fusebit EESAVE
+   ==============
+   Its programming causes content hold of the EEPROM memory from deleting; FLASH memory is available to be normally deleted.
+   It is used in situation, when user want to upload new content to the FLASH memory by means of programmer, and at the same
+   time new program has the access to data of the old program saved in EEPROM.
+
+
+8. Fusebits BOOTSZ and BOOTRST
+   ===========================
+   They are discussed later.
+
+
+9. Fusebit SPIEN
+   =============
+   SPIEN unlocks processor ISP interface. This bit cannot be cleared (deleted) in serial programming - it is possible by using
+   JTAG or HV interface.
+
+
+10. Fusebit DWEN
+    ============
+    Its role is to unlock debugWire interface, which allows microcontroller debugging.
+
+
+11. Fusebit CKDIV8
+    ==============
+    It determines clock speed frequency. By default processors have this bit programmed (0), in effect clock is divided by 8.
+    It is possible to program this bit by configuring clock prescaler register (CLKPR):
+    CLKPR = _BV(CLKPCE);    // Allow to changing prescaler configuration
+    CLKPR = 0;              // Change prescaler to 'no clock division'
+    // From this moment, CKDIV8 bit state does not matter
+
+
+12. Fusebit SUT
+    ===========
+    It determines number of clock cycles after powering on, after which processor will be taken out from reset state.
+
+
+13. Fusebit CKOUT
+    =============
+    It causes setting on output of the processor CKOUT, buffered clock speed signal. Due to this, other systems can use 
+    processor clock. Additionally, it allows synchronous work of peripherals with the processor.
+    By default, this fusebit is unprogrammed (1), and its pin is treated as general I/O pin.
+
+
+14. Fusebits CKSEL
+    =============
+    They determine in which way clock signal for the processor is generated. By default, they are programmed to choose 
+    internal RC generator as a clock source.
+    It is necessary to introduce with catalog note in the case of changing their configuration.
+
+    AVR microcontrollers can be clocked from three different sources:
+    1) External clock connected to XTAL1 input, this external generator can be other AVR, which allows synchronization of
+       both microcontrollers.
+    2) Internal clock (RC generator), which is set by default, its disadvantage is low stability.
+    3) External quartz resonator, which is connected to XTAL1 and XTAL2 pins, it is much more stable than RC generator.
+
+
+15. Fusebit RSTDISBL
+    ================
+    Its programming (0) allows to use RESET pin as a general I/O pin. After programming this bit, it is not possible to
+    further programming processor in serial mode, but it is possible to program processor by JTAG, HV, or parallel interface.
+
+
+17. Signature
+    =========
+    All of the AVRs have unique signature given in the production process. This signature depicts processor type and available
+    memory. Thanks to this, programmer is able to verify whether connected processor is the same as chosen by the user.
+    This signature does not contain unique serial number for given chip.
+
+
+18. Lockbits in AVR-libc
+    ====================
+    Lockbits definitions supported by given processor model are stored in header file: <avr/io.h>. This header file contains
+    macro definitions concern with lockbits configurations for given processor. Used macro definition is LOCKBITS, which by
+    default is set to 0xFF, that means all bits are unprogrammed (0). It is good to use predefined symbols in <avr/io.h>
+    header. Each symbol can be sum by bit product, e.g.     LOCKBITS = (BLB1_MODE_3 & LB_MODE_3);
+
+    LOCBITS macro can be initialized only once.
+
+    Lockbits configuration for compiled program can be read from elf file using this command:   avr-objdump -s -j .lock <elf file>
+
+    For above lockbit configuration for ATMega88 result should looks like this:
+
+    test.elf:   file format elf32-avr
+
+    Contents of section .lock:
+    830000 cc
+
+    Lockbits value is then: 0xCC.
+
+
+19. Fusebits in AVR-libc
+    ====================
+    Similarly like in lockbits, fusebits defined in the program will be placed in special section of elf file, from where they 
+    could be read by the program which controls the programmer and used to processor configuration.
+    All definitions useful in low-level fusebits manipulation are stored in <avr/fuse.h> header file, <avr/io.h> contains
+    fusebits definitions used by the given processor model.
+    Amount of bytes used for fusebits is given by the macro: FUSE_MEMORY_SIZE.
+    Fusebits defining is done by FUSES macro, e.g.
+    
+    FUSE = 
+    {
+        .low      = LFUSE_DEFAULT,
+        .high     = (FUSE_BOOTSZO & FUSE_BOOTSZ1 & FUSE_EESAVE & FUSE_DWEN),
+        .extended = EFUSE_DEFAULT,
+    };
+
+    If the macro FUSE_MEMORY_SIZE returns:
+    1   :   only .low field is accessible
+    2   :   .low and .high are accessible
+    3   :   .low, .high, .extended are accessible
+
+    Misuse of given bytes can cause the blockage of the processor. Similarly as in the case of lockbits, only first initialization
+    is considered, so it is good to define it at the beginning of the program.
+
+    Fusebits can be read by using this instruction:
+
+    avr-objdump -s -j .fuse test.elf
+
+    ADCNoiseReduction.elf:  file format elf32-avr
+
+    Contents of section .fuse:
+    820000  62d1f9              b..
+
+    LSB (Least Significant Byte) is showed on the left, MSB (Most Significant Byte) on the right.
+    If there is less bytes, the less bytes will be showed.
