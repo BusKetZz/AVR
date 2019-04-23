@@ -1,0 +1,117 @@
+******************************************************************************************************************************
+*                                                                                                                            *
+*                                            ARITHMETIC AND BIT OPERATIONS                                                   *
+*                                                                                                                            *
+******************************************************************************************************************************
+
+@GOALS:     1) What are the fundamentals of microcontroller arithmetic and variable types;
+            2) How to convert different data types;
+            3) How to use integer, fixed- and floating point types;
+            4) What are bit operations and how to use them in practice.
+
+
+1. Signed and unsigned numbers
+   ===========================
+   Signed values    :   + and -
+   Unsigned values  :   +
+
+   Usually the most significant bit is used to define sign of the number.
+   If this bit is set to 1 - number is negative, if 0 - nubmer is positive.
+
+   SIGN | B14 | B13 | B12 | B11 | B10 | B9 | B8 | B7 | B6 | B5 | B4 | B3 | B2 | B1 | B0 
+   <-------------------------------------------> <------------------------------------->
+                Most Significant Byte (MSB)                  Least Significant Byte (LSB) 
+   <----------------------------------------------------------------------------------------->                   
+                                            Word
+
+
+2. U2 - Two's Complement for signed numbers
+   ========================================
+   Signed numbers are stored in Two's Complement code (U2). In this coding system, using n-bits we
+   are able to store number in the range [-2^(n-1) ... 2^(n-1)-1], e.g.
+   8-bits representation    :   numbers from -128 to 127
+   16-bits representation   :   numbers from -32768 to 32767
+
+   Advantages of U2 system:                                        
+   1) No need of conversion between signed and unsigned numbers in the operations like addition and subtraction;
+   2) If we want to negate a number (3 -> -3), we need to negate each bit and add one. It is widely used by compiler
+      because such operations are very fast thanks to specialized asembler instructions.
+
+
+3. Types of different size
+   =======================
+
+      Older tetrad       Younger tetrad
+   <----------------> <-----------------> 
+   B7 | B6 | B5 | B4 | B3 | B2 | B1 | B0
+   <------------------------------------>
+                  Byte
+
+
+    B15 | B14 | B13 | B12 | B11 | B10 | B9 | B8 | B7 | B6 | B5 | B4 | B3 | B2 | B1 | B0 
+   <-------------------------------------------> <------------------------------------->
+           Most Significant Byte (MSB)                  Least Significant Byte (LSB) 
+   <----------------------------------------------------------------------------------------->                   
+                                            Word
+
+                        Word
+                 <--------------->
+   Older word   |   Younger word
+   <---------------------------->
+           Double word
+
+                    Double word
+                 <--------------->
+                |
+   <---------------------------->
+          Quadruple word
+
+
+4. Primitive Data Types
+   ====================
+   To Primitive Data Types belongs : 
+   1) integers; 
+   2) fixed-position (represents number and its fractional part with specified
+      number of binary places); 
+   3) floating point (real numbers).
+
+
+5. Type: Integer
+   ========
+   AVR microcontrollers belongs to 8-bit family, that is why they are able to operate on 8-bit numbers.
+   In the case of usage longer number - 2 bytes, 4 bytes or 8 bytes - this numbers will be not translate into 
+   single assembler instructions but into their strings, which will slow the program execution.
+
+
+6. Type: _Bool
+   ===========
+   Bool type allows to store: true (1) and false (0).
+   In AVR, this type unfortunately occupies 8 bits (whole byte), but access to this type is much more faster.
+   In this situation: true (not 0), false (0)
+
+   If we want to save memory, and access time is not critical point we can declare structure, which allows to 
+   access each bit of the byte:
+
+   typedef struct
+   {
+       bool b0 : 1;
+       bool b1 : 1;
+       bool b2 : 1;
+       bool b3 : 1;
+       bool b4 : 1;
+       bool b5 : 1;
+       bool b6 : 1;
+       bool b7 : 1;
+   } flags;
+
+
+7. Type: Characters
+   ================
+   There are three character types: signed char, unsigned char and char (without specification).
+   GCC implementation on AVR microprocessors assumes, that char type and its derivatives are 8 bits long (1 byte).
+
+   @REMEMBER: All lengths of given types apply only to AVR processors. On the different platforms (PC or ARM processors) they can
+              have different size (usually have). That is why transfer of binaries is difficult.
+
+   Char type is nothing special, it can store characters but mostly it is used to store values in range of 0..255 (unsigned char) and
+   -128..127 (signed char). Whether char is by default unsgined or signed, it depends on the compiler.
