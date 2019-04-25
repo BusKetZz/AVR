@@ -115,3 +115,167 @@
 
    Char type is nothing special, it can store characters but mostly it is used to store values in range of 0..255 (unsigned char) and
    -128..127 (signed char). Whether char is by default unsgined or signed, it depends on the compiler.
+
+
+8. Type: Integer 
+   =============
+   For AVR:
+   * short int      -   8 bits
+   * int            -   16 bits
+   * long int       -   32 bits
+   * long long int  -   64 bits
+
+   Precise ranges, which are represented by each type, are prescribed by constants defined in <limits.h> file, e.g. INT_MIN and INT_MAX.
+   The derivatives of each type with constant size, independent of the platform are defined in <stdint.h>.
+
+
+9. Endianness
+   ==========
+   1) little-endian     :   LSB is first
+   2) big-endian        :   MSB is first
+
+   AVR MCUs and avr-gcc compiler use little-endian convention, which is either used by PCs.
+
+
+10. Type: Enumeration
+    =================
+    Enumeration types represents next values of the given collection. Mostly they are of int type - 16 bits.
+    It is possible to cut enum type to 8 bits by using -fshort-enums compilation option.
+    By default, Atmel Studio has this option turned on. If we want to implement enum type with more than 256 elements,
+    we need to disable this option.
+
+
+11. Fixed-position arithmetic
+    =========================
+    Fixed-position arithmetic is a normal arithmetic of integers with the implemented imaginary comma.
+    Function which corrects the position of fractional part:
+    unsigned long fixmul(unsigned long x, unsigned long y) { return x*y/100; }
+    unsigned long fixdiv(unsigned long x, unsigned long y) { return x/y*100; }
+
+    Operations on fixed-position types can be speed up, by setting type resolution in the binary places instead of decimal places.
+
+    Compiler avr-gcc supports fixed-position operations.
+    <stdfix.h> contains:
+    - references for embedded types,
+    - constants which define ranges of given fixed-position types,
+    - functions which operate on this types
+
+
+12. Fixed-position: derivatives of type _Fract
+    ==========================
+    This type stores the fractional part of the number. It includes <-1;1> for signed _Fract and <0;1> for unsigned _Fract.
+
+    |        Type            |  Format   |    Size     |     Resolution
+    ---------------------------------------------------------------------
+    | signed short _Fract       S.7         1 byte          0.0078125
+    | signed _Fract             S.15        2 bytes         ca. 0.00003
+    | signed long _Fract        S.31        4 bytes         ca. 4.6E-10
+    | signed long long _Fract   S.63        8 bytes         ca. 4E-19
+    | unsigned short _Fract     .8          1 byte          0.00390625
+    | unsigned _Fract           .16         2 bytes         ca. 0.000015
+    | unsigned long _Fract      .31         4 bytes         ca. 2.E-10
+    | unsigned long long _Fract .64         8 bytes         ca. 5.4E-20
+
+    S - means bit which represents number sign
+
+
+13. Fixed-position: derivatives of type _Accum
+    ==========================================
+    This type and its derivatives represent fixed-position number consisted of integer part and fractional part.
+    MSB bit is used to store number sign.
+
+    |           Type            |  Format   |    Size     |     Resolution      |       Range
+    ----------------------------------------------------------------------------------------------
+    | signed short _Accum       S8.7        2 bytes            1/2^8            <-2^7; 2^8-1/2^8>
+    | signed _Accum             S16.15      4 bytes            1/2^16           <-2^15; 2^16-1/2^16>
+    | signed long _Accum        S32.31      8 bytes            1/2^32           <-2^31; 2^32-1/2^32>
+    | signed long long _Accum   S16.47      8 bytes            1/2^64           <-2^63; 2^64-1/2^64>
+    | unsigned short _Accum     8.8         2 bytes            1/2^8            <0; 2^8-1/2^8>
+    | unsigned _Accum           16.16       4 bytes            1/2^16           <0; 2^16-1/2^16>
+    | unsigned long _Accum      32.32       8 bytes            1/2^32           <0; 2^32-1/2^32>
+    | unsigned long long _Accum 16.48       8 bytes            1/2^64           <0; 2^64-1/2^64>
+
+    S - means bit which stores number sign; 
+    before '.' - number of bits which represents integer part
+    after  '.' - number of bits which represents fractional part
+
+
+14. Type with saturation: _Sat
+    ==========================
+    -Sat makes the variable either maximum or minimum in the case of variable overflow, e.g.
+
+    _Fract f = 0.25r;               _Sat _Fract f = 0.25r;
+    int i    = 4;                   int i = 4;
+    f = f * i; // result: -1        f = f * i; // result: 1
+
+    Operations made on _Sat types are a little bit slower, because they need some additional checking procedure.
+
+
+15. Conversion: fixed-position number to string
+    ===========================================
+    void AccumToStr(_Accum z, char *Buffer)
+    {
+        itoa(z, Buffer, 10);                        // Convert integer part of the number
+        strcat(Buffer, ",");        
+        z =z - (int)z;                              // Delete integer part, leave remainder
+        itoa(z*10000, &Buffer[strlen(Buffer)], 10); // Convert remainder with the 5 decimal places precision
+    }
+
+
+    int pow10i(unsigned short n)        // Calculate 10^n
+    {
+        if(n>0) return 10*pow10i(n-1);
+        else return 1;
+    }
+
+    _Accum StrToAccum(char *Buffer)
+    {
+        _Accum a = atoi(Buffer);        // Integer part conversion
+        Buffer = strchr(Buffer, ',');   // Is there anything after ','?
+        
+        if(Buffer)
+        {
+            Buffer++;
+            int tmp  = atoi(Buffer);                            // Fractional part conversion
+            _Accum r = (_Accum)tmp / pow10i(strlen(Buffer));    // Adding to result 
+
+            if(a<0) a -= r; else a += r;                        // In order to correct conversion of negative numbers
+        }
+        return a;
+    }
+    
+
+16. Floating point arithmetic
+    =========================
+    In 99% there is no need to use floating point numbers.
+    In the case of avr-gcc compiler ther is only one floating point type - float (32 bits), double is the same as float.
+    Usage of this type requires inclusion of libm.a mathematical library.
+    This library is added by setting in linker script instruction:  LIBS = -lm.
+
+
+17. Floating point relational operators
+    ===================================
+    If we want to compare anything with float type (or other floating point type) we need to consider possible 
+    representation error - its value is represented by 'e' or 'epsilon'
+
+    Instead of:     if(y==10)...
+    We should:      if(fabs(y - 10) < epsilon)... // y == 10
+
+    'epsilon' defines by how much 'y' can differ from 10 to acknowledge that both values are equal;
+    'fabs()' returns absolute value
+
+
+    Instead of:     volatile float y = 0;
+                    do
+                    {
+                        y += 0.1;
+                    }while(y < 3.0);
+
+    We should:      const float epsilon = 0.000001;
+                    volatile float y    = 0;
+                    do
+                    {
+                        y += 0.1;
+                    }while(fabs(y - 3) < epsilon);
+
+                    
