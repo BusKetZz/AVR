@@ -25,7 +25,7 @@ int main(void)
 {
     char buffer[20];
     float z = 12.345678;
-    dtostre(z, buffer, 2, 0);
+    dtostre(z, buffer, 2, 0);   // result: buffer stores string '1.23e+01'
 
     return 0;
 }
