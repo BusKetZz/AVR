@@ -6,7 +6,7 @@
  * 
  *  @param        __val   :   number to convert
  *  @param        __s     :   pointer to buffer in which conversion result will be placed
- *  @param        __prec  :   amount of fractional number
+ *  @param        __prec  :   decimal precision
  *  @param        __flags :   conversion parameters:
  *                            - DTOSTRE_UPPERCASE   - E instead of e
  *                            - DTOSTRE_ALWAYS_SIGN - space before positive numbers
