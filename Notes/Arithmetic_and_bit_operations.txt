@@ -280,8 +280,8 @@
 
                     
 
-18. Bit operation: product &
-    ========================
+18. Bit operation: product & (AND)
+    ==============================
 
     x  |  y  |  z 
     -------------
@@ -299,8 +299,8 @@
                     x & 0xFF = x;
 
 
-19. Bit operation: sum |
-    ====================
+19. Bit operation: sum | (OR)
+    =========================
 
     x  |  y  |  z 
     -------------
@@ -318,4 +318,20 @@
                     x | 0xFF = 0xFF;
 
 
-            
+ 20. Bit operation: exclusive sum ^ (XOR)
+     ===================================
+
+    x  |  y  |  z 
+    -------------
+    0  |  0  |  0
+    1  |  0  |  1
+    0  |  1  |  1
+    1  |  1  |  0
+
+    @USAGE  :   Bit exclusive sum is used to check whether given bit has changed 
+                or not. If its state has been changed the result is 1, if not 0.
+
+    @REMEMBER   :   x ^ 0    = 0;
+                    x ^ 0xFF = ~x;
+
+              
