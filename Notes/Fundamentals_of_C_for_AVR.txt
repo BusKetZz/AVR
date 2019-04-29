@@ -1,0 +1,69 @@
+******************************************************************************************************************************
+*                                                                                                                            *
+*                                             FUNDAMENTALS OF C FOR AVR                                                      *
+*                                                                                                                            *
+******************************************************************************************************************************
+
+@GOALS:     - Local and global variables;
+            - How to use complex data types;
+            - Pointers and how to use them;
+            - Common C 'traps';
+            - Basic keywords in C;
+            - Specific extensions of C for AVR.
+
+
+1. Variables range: Global
+   =======================
+
+   @BRIEF   :   Global variables are accessible from any place of the program, they are declared out of any 
+                block or function, e.g.
+                @CODE:
+                        int x;
+                        float y;
+
+                        int main()
+                        {
+
+                        }
+               @ENDCODE
+
+               Such variables are visible from the point of compiler unit (source code), in which they have been 
+               declared. If we want to make them visible in other files, we need to add keyword 'extern'.
+
+   @NOTE    :   In the world of microcontrollers, global variables are EVIL. They are only used in the case of 
+                data transfer between interrupt service routine functions and the rest of the program.
+
+
+2. Variables range: Local
+   ======================
+
+   @BRIEF   :   Local variables are declared inside function or block of the program.
+                There are two consequences of this:
+                - Access to such a variable is only possible from inside function or block, in which
+                  variable was declared;
+                - Lifetime of local variable is limitied, after end of the function, variable is destroyed
+                  (except constant variables).
+                @CODE:
+                        void test()
+                        {
+                            int x;
+                            while(1)
+                            {
+                                int y;
+                                y = 1 + x; // OK, x and y are declared
+                            }
+                            y++;           // Error, y does not exist 
+                        }
+                @ENDCODE
+
+   @WATCHOUT:   @CODE:
+                        int* square(int x)
+                        {
+                            int k = x * x;
+                            return &k;
+                        }
+                @ENDCODE
+                This function returns address of a local variable 'k'. Problem is, that this variables
+                does not exist after end of this function, what means the returned address is incorrect.
+                Remember to not return address of the local variable. 
+
