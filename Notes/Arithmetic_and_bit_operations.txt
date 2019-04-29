@@ -344,6 +344,30 @@
                 In fact it is used by the compiler to optimize result code.
 
 
-                
+21. Bit operation: left shift (<<) and right shift (>>)
+    ===================================================                
+
+    @GOOD TO KNOW       :   left shift (<<) is equivalent to multiplication by 2
+                            right shift (>>) is equivalent to division by 2
+
+    @WATCHOUT           :   Result of shifting number with sign (especially in the case of negative number)
+                            is undefined or depends on a compiler implementation. It is not recommended to
+                            shift bits in signed numbers.
+
+
+    @COMMON SITUATION   :   uint32_t x = (1 << 16);
+
+                            Supposed effect of this operation   :  x = 65536
+                            Real effect                         :  Warning left shift count >= width of type
+
+                            It is the case, in which compiler warns the user that used type is not enough wide
+                            to store such a big result number. 
+                            x is of type uint32_t, but '1' is of int type, that means (for avr-gcc compiler)
+                            '1' is 16-bit wide which is too small for such an operation. In fact, result number
+                            is assigned to x which is 32-bit wide, but this is done after left shift operation.
+                            
+                            Solution for this:  uint32_t x = (uint32_t)(1 << 16);   // this operation is named 'casting'
+
+
 
               
