@@ -279,3 +279,24 @@
                     }while(fabs(y - 3) < epsilon);
 
                     
+
+18. Bit operation: product
+    ======================
+
+    x  |  y  |  z 
+    -------------
+    0  |  0  |  0
+    1  |  0  |  0
+    0  |  1  |  0
+    1  |  1  |  1
+
+    @USAGE  :   Bit product is mostly used to reset specified bits, e.g. 
+                User want to reset LSB in a variable x, so the following
+                operation must be done: x &= 0b11110000;
+                In this case, MSB is not touched, and LSB is reset.
+
+   @REMEMBER    :   x & 0    = 0;
+                    x & 0xFF = x;
+
+
+19.  
