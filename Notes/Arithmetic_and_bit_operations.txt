@@ -334,4 +334,16 @@
     @REMEMBER   :   x ^ 0    = 0;
                     x ^ 0xFF = ~x;
 
+
+21. Bit operation: negation ~ (NOT)
+    ===============================
+
+    ~0b00001111 = 0b11110000
+
+    @USAGE  :   Bit negation is used to addition and subtraction operations.
+                In fact it is used by the compiler to optimize result code.
+
+
+                
+
               
