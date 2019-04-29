@@ -280,8 +280,8 @@
 
                     
 
-18. Bit operation: product
-    ======================
+18. Bit operation: product &
+    ========================
 
     x  |  y  |  z 
     -------------
@@ -299,4 +299,23 @@
                     x & 0xFF = x;
 
 
-19.  
+19. Bit operation: sum |
+    ====================
+
+    x  |  y  |  z 
+    -------------
+    0  |  0  |  0
+    1  |  0  |  1
+    0  |  1  |  1
+    1  |  1  |  1
+
+    @USAGE  :   Bit sum is mostly used to set specified bit, e.g.
+                Uset want to set LSB in a variable x, so the following
+                operation must be done: x |= 0b00001111;
+                In this case, MSB is not touched, and LSB is set.
+
+   @REMEMBER    :   x | 0    = x;
+                    x | 0xFF = 0xFF;
+
+
+            
