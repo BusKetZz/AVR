@@ -67,3 +67,51 @@
                 does not exist after end of this function, what means the returned address is incorrect.
                 Remember to not return address of the local variable. 
 
+
+3. Pointers
+   ========
+
+   @BRIEF   :   Pointers are variables which store addresses of other variables (or function, or generally objects).
+                Their size (amount of occupied memory) depends on the address length in given type of processor.
+                AVR microcontrollers, which have up to 64kB memory, use 16-bit addresses, larger one use 24-bit addresses.
+                For this reason, in AVRs there are two types of pointers:
+                16-bit - they allow to data addressing in the range of first 64kB of memory and function addressing
+                         in the range of first 128kB of memory.
+                24-bit - they additionally unify addressing spaces FLASH and SRAM.
+
+                Variables are stored in the memory, so the name of the variable is the address of memory cell in which
+                given variable is stored. So, it can be said, that variable name is pointer to the memory space in which
+                its value is stored. 
+
+   
+   @STRUCTURE POINTER   :   @CODE:
+                                    struct point
+                                    {
+                                        int x;
+                                        int y;
+                                    } ;
+
+                                    struct point point;
+                                    struct point *pptr;
+                                    pptr = &point;
+
+                                    pptr->x = 11;   // equivalent to: (*pptr).x = 11;
+                            @ENDCODE
+
+
+   @REFERENCE           :   @CODE:
+                                    void test(int *x)   // calling: test(&x);
+                                    {
+                                        *x = (*x) + 1;
+                                    }
+                            @ENDCODE
+
+
+   @VOID POINTER        :   @CODE:
+                                    void *ptr;
+                                    *ptr++;         // Warning: dereferencing 'void*' pointer
+                                    *(char*)ptr++;  // Ok, void pointer is casted to: pointer to char type
+                            @ENDCODE
+
+                            
+
