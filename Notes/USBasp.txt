@@ -1,0 +1,41 @@
+******************************************************************************************************************************
+*                                                                                                                            *
+*                                                    USBasp Programmer                                                       *
+*                                                                                                                            *
+******************************************************************************************************************************
+
+1. Programming brand new AVRs
+   ==========================
+   By default, the USBasp programs the target with a "programming clock" of 375[kHz]. This makes for fast programming, but
+   only works if the AVR chip is configured with a clock of at least 1.5[MHz].
+
+   Brand new AVR chips usually come configured from the factory with an internal clock of 1[MHz]. This is set as part of the
+   "fuse bits" inside the microcontroller. 
+
+   The symptoms of trying to program an AVR with an overly fast programming clock are the same as when no AVR is connected
+   at all:
+            avrdude: error: programm enable: target doesn't answer. 1
+            avrdude: initialization failed, rc=-1
+                     Double check connections and try again, or use -F to override this check.
+
+
+2. Set the "Slow Clock" jumper
+   ===========================
+   The best option when one programs AVR using Arduino IDE.
+
+   Bridging across the slow clock jumper lowers the programming clock to 8[kHz], slow enough for AVRs running at just 32[kHz].
+
+
+3. Set the clock in software
+   =========================
+   This is the best option if one programs AVR using avrdude on the command line. Avrdude's -B option allows one to set the
+   programming clock speed from software, no jumper required.
+
+   The option -B 4 will set a programming speed of 187.5[kHz], still fast but slow enough fro a brand dew 1[MHz] AVR.
+
+   For example, to read the configuration of a brand new ATmega328:
+
+        avrdude -p m328p -B 4 -c usbasp -v
+
+   If it is still not enough, one just need to keep increasing -B. The maximum -B 64 yields an 8[kHz] programming clock,
+   same as if the "slow clock" jumper was installed. 
