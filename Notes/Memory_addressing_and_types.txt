@@ -1,0 +1,61 @@
+******************************************************************************************************************************
+*                                                                                                                            *
+*                                               Memory Addressing and Types                                                  *
+*                                                                                                                            *
+******************************************************************************************************************************
+
+1. RAM - Random Access Memory
+   ==========================
+   Random Access Memory (RAM) is used because the CPU can access any block of memory in RAM in the same amount of time.
+   This differs from sequential storage such as tape where access time differs for different parts of the storage space.
+   RAM is used for data memory and allows the CPU to create and modify data as it executes the application program.
+   RAM is volatile, it holds its contents onyl as long as it has constant power supply.
+
+
+2. ROM - Read Only Memory
+   ======================
+   ROM is typically used for program instructions. The ROM in a microcontroller usually holds the final application program.
+
+
+3. PROM - Programmable ROM
+   =======================
+   PROM started as an expensive means to prototype and test application code before burning ROM. Many developers use PROM
+   devices to provide software updates to customers without the cost of sending out new hardware.
+
+
+4. EPROM - Erasable Programmable ROM
+   =================================
+   EPORM is not volatile and is read only. Chips with EPROM have a quartz window on the chip. Direct exposure to ultra-violet
+   radiation will erase the EPROM contents. The default, blank state for an EPROM device has each block of memory set (1).
+   Reprogramming the device resets or clears the appropriate EPROM bits to 0. Because of the way EPROM storage is erased, 
+   one cannot selectively delete portions of EPROM - erasing memory will clear the entire storage space.
+
+
+5. EEPROM - Electrically Erasable Programmable ROM
+   ===============================================
+   EEPROM devices allow selective erasing of memory sections. They use high voltage to erase and re-program each memory block.
+   The most common use for EEPROM is recording and maintaining configuration data vital to the application, eg. record the current
+   configurations settings of the device. Often the default or factory configuration settings are stored in ROM and the user
+   can issue a command to restore default settings by overwriting the current contents of EEPROM with the default information.
+
+
+6. Flash Memory
+   ============
+   Flash memory is an economical compromise between EEPROM and EPROM techonology. As with EEPROM high voltage is applied to
+   erase and rewrite flash memory. However, unlike EEPROM, one can not selectively erase portions of flash memory - the entire
+   block as with EPROM devices must be erased.
+
+
+7. Registers
+   =========
+   Registers are used to control program execution and maintain intermediate values needed to perform required calculations. 
+   Usage of CPU register can be extremely dangerous, they value used for temporary storage can be overwritten at any time by the CPU.
+   8-bit microcontrollers do not often provide resources for register memory outside the CPU, this means that the C 'register' keyword
+   is meaningless because the compiler can not dedicate a CPU register for data storage.
+   Some C implementations will set aside RAM for special purpose 'pseudo-registers' to use when your application attempts certain
+   operations, for example 16-bit math operation.
+
+
+8. Scratch Pad
+   ===========
+   Scratch Pad is a block of memory which can be used for more than one purpose.
