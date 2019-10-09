@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "AVR",
+            "includePath": [
+                "/Users/busketzz/opt/Libraries/avr-libc-2.0.0",
+                "/Users/busketzz/opt/Libraries/avr-libc-2.0.0/include",
+                "/Users/busketzz/opt/Libraries/avr-libc-2.0.0/include/avr"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/local/bin/avr-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}"
+        }
+    ],
+    "version": 4
+}
