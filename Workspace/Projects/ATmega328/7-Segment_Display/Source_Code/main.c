@@ -9,13 +9,115 @@
  */
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 
 
+
+/*****************************************************************************/
+/*                            PRIVATE DEFINES                                */
+/*****************************************************************************/
+
+/* 7-Segment display literal-pin equivalent */
+#define A   (1 << PIN0)
+#define B   (1 << PIN1)
+#define C   (1 << PIN2)
+#define D   (1 << PIN3)
+#define E   (1 << PIN4)
+#define F   (1 << PIN5)
+#define G   (1 << PIN6)
+#define H   (1 << PIN7)
+
+
+/* Numbers to display */
+#define ZERO    0x0
+#define ONE     (B | C)
+#define TWO     (A | B | G | E | D)
+#define THREE   (A | B | C | D | G)
+#define FOUR    (B | C | F | G)
+#define FIVE    (A | F | G | C | D)
+#define SIX     (A | F | E | D | C | G)
+#define SEVEN   (A | B | C)
+#define EIGHT   (A | B | C | D | E | F | G)
+#define NINE    (A | F | G | B | C | D)
+#define DOT     (H)
+
+
+
+/*****************************************************************************/
+/*                             PRIVATE ENUMS                                 */
+/*****************************************************************************/
+
+/* SW1 and SW2 state */
+enum button_state_t
+{
+    CAPTURED,
+    NON_CAPTURED
+}buttonState = NON_CAPTURED;
+
+
+
+/*****************************************************************************/
+/*                           PRIVATE VARIABLES                               */
+/*****************************************************************************/
+
+static const uint8_t numberToDisplay[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE,
+                                            SIX, SEVEN, EIGHT, NINE};
+static uint8_t numbersCounter;
+
+
+
+/*****************************************************************************/
+/*                              MAIN PROGRAM                                 */
+/*****************************************************************************/
 
 int main(void)
 {   
-    /* Set Port B, Pin 1 and Pin 2 as an input */
-    DDRB &= ~((1 << PIN1) | (1 << PIN2));
+    /* Set Port C, Pin 4 and Pin 5 as an input */
+    DDRC &= ~((1 << PIN4) | (1 << PIN5));
 
-    /* Set Port B, 
+    /* Set all the pins of Port D as an output */ 
+    DDRD |= 0xFF;
+    
+    while(1)
+    {
+
+    }
+
+    return 0;
+}
+
+
+
+/*****************************************************************************/
+/*                        INTERRUPT SERVICE ROUTINES                         */
+/*****************************************************************************/
+
+/* SW1 interrupt - increment display number */
+ISR(PCINT12_vect)
+{
+    if(buttonState == NON_CAPTURED)
+    {
+        PORTD = numberToDisplay[++numbersCounter];
+        buttonState = CAPTURED;
+    }
+    else if(buttonState == CAPTURED)
+    {
+        buttonState = NON_CAPTURED;
+    }
+}
+
+
+
+/* SW2 interrupt - decrement display number */
+ISR(PCINT13_vect)
+{
+    if(buttonState == NON_CAPTURED)
+    {
+        PORTD = numberToDisplay[--numbersCounter];
+        buttonState = CAPTURED;
+    }
+    else if(buttonState == CAPTURED)
+    {
+        buttonState = NON_CAPTURED;
+    }
 }
