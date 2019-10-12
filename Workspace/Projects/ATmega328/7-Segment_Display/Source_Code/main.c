@@ -1,5 +1,5 @@
 /**
- *  Project: 8-segment Display
+ *  Project: 7-Segment Display
  * 
  *  File: main.c
  * 
@@ -7,6 +7,8 @@
  *
  *  Date: 08.10.2019
  */
+
+#define __AVR_ATmega168P__
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -29,7 +31,7 @@
 
 
 /* Numbers to display */
-#define ZERO    0x0
+#define ZERO    (A | B | C | D | E | F)
 #define ONE     (B | C)
 #define TWO     (A | B | G | E | D)
 #define THREE   (A | B | C | D | G)
@@ -40,6 +42,11 @@
 #define EIGHT   (A | B | C | D | E | F | G)
 #define NINE    (A | F | G | B | C | D)
 #define DOT     (H)
+
+
+/* Switches */
+#define SW1   (1 << PIN4)
+#define SW2   (1 << PIN5)
 
 
 
@@ -62,7 +69,7 @@ enum button_state_t
 
 static const uint8_t numberToDisplay[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE,
                                             SIX, SEVEN, EIGHT, NINE};
-static uint8_t numbersCounter;
+static int numbersCounter;
 
 
 
@@ -72,15 +79,30 @@ static uint8_t numbersCounter;
 
 int main(void)
 {   
-    /* Set Port C, Pin 4 and Pin 5 as an input */
-    DDRC &= ~((1 << PIN4) | (1 << PIN5));
+    /* Set Port C, switch 1 and switch 2 as an input */
+    DDRC &= ~(SW1 | SW2);
+
+    /* Set pull-up resistors for switch 1 and switch 2 */
+    PORTC |= (SW1 | SW2);
 
     /* Set all the pins of Port D as an output */ 
     DDRD |= 0xFF;
+
+    /* Enable Pin Change Interrupt for pin 12 and pin 13 */
+    PCICR |= PCIE1;
+
+    /* Set Pin Change Enable Mask for pin 12 and pin 13 */
+    PCMSK1 |= (PCINT12 | PCINT13);
+
+    /* Enable global interrupts */
+    sei();
+
+    /* Turn on 7-Segment display with default '0' value */
+    PORTD = numberToDisplay[0];
     
     while(1)
     {
-
+        /* Do nothing, wait for interrupt from the buttons */
     }
 
     return 0;
@@ -93,28 +115,32 @@ int main(void)
 /*****************************************************************************/
 
 /* SW1 interrupt - increment display number */
-ISR(PCINT12_vect)
+ISR(PCINT1_vect)
 {
+    uint8_t whichButton = PINC;
+
     if(buttonState == NON_CAPTURED)
     {
-        PORTD = numberToDisplay[++numbersCounter];
-        buttonState = CAPTURED;
-    }
-    else if(buttonState == CAPTURED)
-    {
-        buttonState = NON_CAPTURED;
-    }
-}
+        if((whichButton & SW1) != 0)
+        {
+            if(++numbersCounter == 10)
+            {   
+                numbersCounter = 0;
+            }
 
+            PORTD = numberToDisplay[numbersCounter];
+            buttonState = CAPTURED; 
+        }
+        else if((whichButton & SW2) != 0)
+        {
+            if(--numbersCounter < 0)
+            {
+                numbersCounter = 9;
+            }
 
-
-/* SW2 interrupt - decrement display number */
-ISR(PCINT13_vect)
-{
-    if(buttonState == NON_CAPTURED)
-    {
-        PORTD = numberToDisplay[--numbersCounter];
-        buttonState = CAPTURED;
+            PORTD = numberToDisplay[numbersCounter];
+            buttonState = CAPTURED; 
+        }
     }
     else if(buttonState == CAPTURED)
     {
