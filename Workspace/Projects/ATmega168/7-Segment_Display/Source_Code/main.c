@@ -8,8 +8,6 @@
  *  Date: 08.10.2019
  */
 
-#define __AVR_ATmega168P__
-
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -74,11 +72,22 @@ static int numbersCounter;
 
 
 /*****************************************************************************/
-/*                              MAIN PROGRAM                                 */
+/*                           PRIVATE FUNCTIONS                               */
 /*****************************************************************************/
 
-int main(void)
-{   
+void PinChangeInterrupt_Init(void)
+{  
+    /* Enable Pin Change Interrupt for pin 12 and pin 13 */
+    PCICR |= PCIE1;
+
+    /* Set Pin Change Enable Mask for pin 12 and pin 13 */
+    PCMSK1 |= (PCINT12 | PCINT13);
+}
+
+
+
+void PORTx_Init(void)
+{
     /* Set Port C, switch 1 and switch 2 as an input */
     DDRC &= ~(SW1 | SW2);
 
@@ -87,12 +96,19 @@ int main(void)
 
     /* Set all the pins of Port D as an output */ 
     DDRD |= 0xFF;
+}
 
-    /* Enable Pin Change Interrupt for pin 12 and pin 13 */
-    PCICR |= PCIE1;
 
-    /* Set Pin Change Enable Mask for pin 12 and pin 13 */
-    PCMSK1 |= (PCINT12 | PCINT13);
+
+/*****************************************************************************/
+/*                              MAIN PROGRAM                                 */
+/*****************************************************************************/
+
+int main(void)
+{   
+    PORTx_Init();
+
+    PinChangeInterrupt_Init();
 
     /* Enable global interrupts */
     sei();
