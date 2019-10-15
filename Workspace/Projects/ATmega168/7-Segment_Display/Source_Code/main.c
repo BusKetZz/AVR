@@ -8,6 +8,8 @@
  *  Date: 08.10.2019
  */
 
+#define __AVR_ATmega168P__
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -42,24 +44,6 @@
 #define DOT     (H)
 
 
-/* Switches */
-#define SW1   (1 << PIN4)
-#define SW2   (1 << PIN5)
-
-
-
-/*****************************************************************************/
-/*                             PRIVATE ENUMS                                 */
-/*****************************************************************************/
-
-/* SW1 and SW2 state */
-enum button_state_t
-{
-    CAPTURED,
-    NON_CAPTURED
-}buttonState = NON_CAPTURED;
-
-
 
 /*****************************************************************************/
 /*                           PRIVATE VARIABLES                               */
@@ -67,7 +51,9 @@ enum button_state_t
 
 static const uint8_t numberToDisplay[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE,
                                             SIX, SEVEN, EIGHT, NINE};
-static int numbersCounter;
+volatile static uint8_t numbersCounter;
+
+volatile static uint8_t timerCounter; 
 
 
 
@@ -75,25 +61,27 @@ static int numbersCounter;
 /*                           PRIVATE FUNCTIONS                               */
 /*****************************************************************************/
 
-void PinChangeInterrupt_Init(void)
+void TIMER1_Init(void)
 {  
-    /* Enable Pin Change Interrupt for pin 12 and pin 13 */
-    PCICR |= PCIE1;
+    TCNT1 = 0;
 
-    /* Set Pin Change Enable Mask for pin 12 and pin 13 */
-    PCMSK1 |= (PCINT12 | PCINT13);
+    /* Normal port operation */
+    TCCR1A = 0x00;
+
+    /* Clock source / 64 (prescaler)                                 */
+    /* 1 000 000 [Hz] / 8 = 125 000 [Hz]                             */
+    /* Time period = 1 / frequency = 1 / 125 000 [Hz] = 0,000008 [s] */
+    /* Overflow occurs every 65 535 * 0,000008 = 0.5 [s]             */
+    TCCR1B = (1 << CS11);
+
+    /* Set Overflow Interrupt Enable */
+    TIMSK1 |= (1 << TOIE1);
 }
 
 
 
-void PORTx_Init(void)
+void PORTD_Init(void)
 {
-    /* Set Port C, switch 1 and switch 2 as an input */
-    DDRC &= ~(SW1 | SW2);
-
-    /* Set pull-up resistors for switch 1 and switch 2 */
-    PORTC |= (SW1 | SW2);
-
     /* Set all the pins of Port D as an output */ 
     DDRD |= 0xFF;
 }
@@ -106,9 +94,9 @@ void PORTx_Init(void)
 
 int main(void)
 {   
-    PORTx_Init();
+    TIMER1_Init();
 
-    PinChangeInterrupt_Init();
+    PORTD_Init();
 
     /* Enable global interrupts */
     sei();
@@ -118,7 +106,7 @@ int main(void)
     
     while(1)
     {
-        /* Do nothing, wait for interrupt from the buttons */
+        /* Do nothing, wait for interrupt from the timer */
     }
 
     return 0;
@@ -130,36 +118,20 @@ int main(void)
 /*                        INTERRUPT SERVICE ROUTINES                         */
 /*****************************************************************************/
 
-/* SW1 interrupt - increment display number */
-ISR(PCINT1_vect)
+ISR(TIMER1_OVF_vect)
 {
-    uint8_t whichButton = PINC;
-
-    if(buttonState == NON_CAPTURED)
+    if(timerCounter == 1)
     {
-        if((whichButton & SW1) != 0)
+        if(++numbersCounter > 9)
         {
-            if(++numbersCounter == 10)
-            {   
-                numbersCounter = 0;
-            }
-
-            PORTD = numberToDisplay[numbersCounter];
-            buttonState = CAPTURED; 
+            numbersCounter = 0;
         }
-        else if((whichButton & SW2) != 0)
-        {
-            if(--numbersCounter < 0)
-            {
-                numbersCounter = 9;
-            }
+        PORTD = numberToDisplay[numbersCounter];
 
-            PORTD = numberToDisplay[numbersCounter];
-            buttonState = CAPTURED; 
-        }
+        timerCounter = 0;
     }
-    else if(buttonState == CAPTURED)
+    else
     {
-        buttonState = NON_CAPTURED;
-    }
+        timerCounter++;
+    } 
 }
