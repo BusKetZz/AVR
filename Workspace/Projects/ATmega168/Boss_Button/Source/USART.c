@@ -19,16 +19,16 @@
 void USART_Init(uint16_t baudrate)
 {
     /* Set baud rate */
-    UBRR0H |= (uint8_t)(baudrate >> 8);
-    UBRR0L |= (uint8_t)baudrate;
+    UBRR0H |= (baudrate >> 8);
+    UBRR0L |= baudrate;
 
     /* Enable receiver and transmitter */
     UCSR0B |= ((1 << RXEN0) | (1 << TXEN0));
 
-    /* Set frame format: 8 data bits, 1 stop bit */
+    /* Set frame format: 8 data bits, 1 stop bit, no parity */
     UCSR0B &= ~(1 << UCSZ02);
     UCSR0C |= ((1 << UCSZ00) | (1 << UCSZ01));
-    UCSR0C &= ~(1 << USBS0);  
+    UCSR0C &= ~((1 << USBS0) | (1 << UPM00) | (1 << UPM01));   
 }
 
 

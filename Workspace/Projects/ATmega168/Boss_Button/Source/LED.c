@@ -37,26 +37,25 @@ void LED_Init(port_letter_t PORT_x, led_number_t LEDx)
 
 
 
-void LED_Blink(port_letter_t PORT_x, led_number_t LEDx, 
-              uint16_t delay)
+void LED_Blink(port_letter_t PORT_x, led_number_t LEDx)
 {
     switch(PORT_x)
     {
         case 'B':
             PORTB |= LEDx;
-            _delay_ms(delay);
+            _delay_ms(500);
             PORTB &= ~LEDx;
             break;
         
         case 'C':
             PORTC |= LEDx;
-            _delay_ms(delay);
+            _delay_ms(500);
             PORTC &= ~LEDx;
             break;
         
         case 'D':
             PORTD |= LEDx;
-            _delay_ms(delay);
+            _delay_ms(500);
             PORTD &= ~LEDx;
             break;
     }

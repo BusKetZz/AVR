@@ -3,6 +3,9 @@
 ############    Check these every time you start a new project    ############
 ############------------------------------------------------------############
 
+## Project name
+PROJECT_NAME = BossButton
+
 ## Set used microcontroller and its operational frequency
 MCU = atmega168p
 F_CPU = 1000000
@@ -15,7 +18,10 @@ LOCAL_SOURCE_FILES = LED.c Button.c USART.c
 
 ## Additional external source files
 EXTRA_SOURCE_DIRECTORY = 
-EXTRA_SOURCE_FILES = 
+EXTRA_SOURCE_FILES =
+
+## Header files
+HEADER_FILES = ../Include
 
 
 
@@ -42,15 +48,24 @@ AVRSIZE = avr-size
 AVRDUDE = avrdude
 
 ## Compilation options (type 'man avr-gcc' for additional informations)
-CFLAGS=-std=c99 -Wall -g -Os -mmcu=${MCU} -DF_CPU=${F_CPU} -I.
-TARGET=main
+CFLAGS = -mmcu=${MCU} -DF_CPU=${F_CPU}UL -Os -I. -I${HEADER_FILES}
+CFLAGS += -Wall -Wstrict-prototypes
+CFLAGS += -std=gnu99
 
+## Merge source files together
+EXTRA_SOURCE = ${addprefix ${EXTRA_SOURCE_DIRECTORY}, ${EXTRA_SOURCE_FILES}}
+SOURCE = ${MAIN}
+SOURCE += ${EXTRA_SOURCE}
+SOURCE += ${LOCAL_SOURCE_FILES}
+
+## Generic Makefile routines
 all:
-        ${CC} ${CFLAGS} -o ${TARGET}.bin ${SRCS}
-        ${OBJCOPY} -j .text -j .data -O ihex ${TARGET}.bin ${TARGET}.hex
+	${CC} ${CFLAGS} ${SOURCE} ${EXTRA_SOURCE} --output ${PROJECT_NAME}.bin
+	${OBJCOPY} -j .text -j .data -O ihex ${PROJECT_NAME}.bin \
+    ${PROJECT_NAME}.hex
 
 flash:
-        avrdude -p ${MCU} -B 4 -c usbasp -U flash:w:${TARGET}.hex:i -F -P usb
-
+	${AVRDUDE} -p ${MCU} -B 4 -c ${PROGRAMMER_TYPE} \
+    -U flash:w:${PROJECT_NAME}.hex:i -F -P usb
 clean:
-        rm -f *.bin *.hex
+	rm -f *.bin *.hex

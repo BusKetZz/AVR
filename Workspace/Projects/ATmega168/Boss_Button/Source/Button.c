@@ -41,15 +41,26 @@ void Button_Init(port_letter_t PORT_x, button_number_t BUTTONx)
 
 uint8_t Button_ReadState(port_letter_t PORT_x, button_number_t BUTTONx)
 {
+    uint8_t buttonState;
+
     switch(PORT_x)
     {
         case 'B':
-            return (PINB & (1 << BUTTONx));
+            buttonState = (PINB & BUTTONx);
+            break;
             
         case 'C':
-            return (PINC & (1 << BUTTONx));
+            buttonState = (PINC & BUTTONx);
+            break;
 
         case 'D':
-            return (PIND & (1 << BUTTONx));
+            buttonState = (PIND & BUTTONx);
+            break;
+
+        default:
+            buttonState = -1;
+            break;
     }
+
+    return buttonState;
 }
