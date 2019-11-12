@@ -6,7 +6,6 @@
  * Date: 04.11.2019
  */
 
-
 #include <avr/io.h>
 
 
@@ -61,9 +60,7 @@ void LED_Init(port_letter_t PORT_x, led_number_t LEDx);
  * 
  * @param1  Microcontroller port letter: PORT_x [x = 'A', 'B' or 'C']
  * @param2  LED number: LEDx [x = 0...7]
- * @param3  Delay in miliseconds [0 - 65536]
  * 
  * @return void 
  */
-void LED_Blink(port_letter_t PORT_x, led_number_t LEDx, 
-               uint16_t delay);
+void LED_Blink(port_letter_t PORT_x, led_number_t LEDx);

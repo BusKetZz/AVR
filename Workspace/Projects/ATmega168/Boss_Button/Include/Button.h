@@ -15,7 +15,7 @@
 /*****************************************************************************/
 
 typedef uint8_t button_number_t;
-typedef uint8_t port_letter_t;
+typedef char port_letter_t;
 
 
 
@@ -37,8 +37,6 @@ typedef uint8_t port_letter_t;
 #define PORT_C  (port_letter_t)('C')
 #define PORT_D  (port_letter_t)('D')
 
-
-#define BAUD_9600   6U
 
 
 /*****************************************************************************/
