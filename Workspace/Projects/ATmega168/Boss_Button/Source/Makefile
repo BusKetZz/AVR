@@ -60,12 +60,13 @@ SOURCE += ${LOCAL_SOURCE_FILES}
 
 ## Generic Makefile routines
 all:
-	${CC} ${CFLAGS} ${SOURCE} ${EXTRA_SOURCE} --output ${PROJECT_NAME}.bin
-	${OBJCOPY} -j .text -j .data -O ihex ${PROJECT_NAME}.bin \
-    ${PROJECT_NAME}.hex
+	mkdir -p ../Build
+	${CC} ${CFLAGS} ${SOURCE} ${EXTRA_SOURCE} --output ../Build/${PROJECT_NAME}.bin
+	${OBJCOPY} -j .text -j .data -O ihex ../Build/${PROJECT_NAME}.bin \
+    ../Build/${PROJECT_NAME}.hex
 
 flash:
 	${AVRDUDE} -p ${MCU} -B 4 -c ${PROGRAMMER_TYPE} \
     -U flash:w:${PROJECT_NAME}.hex:i -F -P usb
 clean:
-	rm -f *.bin *.hex
+	rm -r ../Build
