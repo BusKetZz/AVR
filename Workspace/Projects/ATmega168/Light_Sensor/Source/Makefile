@@ -14,7 +14,7 @@ F_CPU = 1000000
 MAIN = main.c
 
 ## Additional local source files
-LOCAL_SOURCE_FILES = LED.c USART.c
+LOCAL_SOURCE_FILES = LED.c USART.c ADC.c
 
 ## Additional external source files
 EXTRA_SOURCE_DIRECTORY = 
