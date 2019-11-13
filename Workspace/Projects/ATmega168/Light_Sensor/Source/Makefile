@@ -4,7 +4,7 @@
 ############------------------------------------------------------############
 
 ## Project name
-PROJECT_NAME = BossButton
+PROJECT_NAME = LightSensor
 
 ## Set used microcontroller and its operational frequency
 MCU = atmega168p
@@ -14,7 +14,7 @@ F_CPU = 1000000
 MAIN = main.c
 
 ## Additional local source files
-LOCAL_SOURCE_FILES = LED.c Button.c USART.c
+LOCAL_SOURCE_FILES = LED.c USART.c
 
 ## Additional external source files
 EXTRA_SOURCE_DIRECTORY = 
