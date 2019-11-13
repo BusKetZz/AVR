@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "delay_basic.h": "c",
-        "io.h": "c",
-        "led.h": "c",
-        "usart.h": "c"
-    },
-    "python.pythonPath": "/usr/bin/python3"
-}
