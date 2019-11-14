@@ -67,6 +67,6 @@ all:
 
 flash:
 	${AVRDUDE} -p ${MCU} -B 4 -c ${PROGRAMMER_TYPE} \
-    -U flash:w:${PROJECT_NAME}.hex:i -F -P usb
+    -U flash:w:../Build/${PROJECT_NAME}.hex:i -F -P usb
 clean:
 	rm -r ../Build
