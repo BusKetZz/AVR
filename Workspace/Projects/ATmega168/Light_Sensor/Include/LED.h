@@ -32,6 +32,8 @@ typedef char port_letter_t;
 #define LED6    (led_number_t)(1 << 6)
 #define LED7    (led_number_t)(1 << 7)
 
+#define ALL_LEDS  (led_number_t)0xFF
+
 
 #define PORT_B  (port_letter_t)('B')
 #define PORT_C  (port_letter_t)('C')
@@ -46,7 +48,7 @@ typedef char port_letter_t;
 /**
  * @brief Initialize LED/LEDs at given port's pin/pins
  * 
- * @param1  Microcontroller port letter: PORT_x [x = 'A', 'B' or 'C']
+ * @param1  Microcontroller port letter: PORT_x [x = A, B or C]
  * @param2  LED number: LEDx [x = 0...7]
  * 
  * @return void 
@@ -58,9 +60,33 @@ void LED_Init(port_letter_t PORT_x, led_number_t LEDx);
 /**
  * @brief Blink given LED/LEDs
  * 
- * @param1  Microcontroller port letter: PORT_x [x = 'A', 'B' or 'C']
+ * @param1  Microcontroller port letter: PORT_x [x = A, B or C]
  * @param2  LED number: LEDx [x = 0...7]
  * 
  * @return void 
  */
 void LED_Blink(port_letter_t PORT_x, led_number_t LEDx);
+
+
+
+/**
+ * @brief Turn ON given LED/LEDs
+ * 
+ * @param1  Microcontroller port letter: PORT_x [x = A, B or C]
+ * @param2  LED number: LEDx [x = 0...7]
+ * 
+ * @return void
+ */
+void LED_ON(port_letter_t PORT_x, led_number_t LEDx);
+
+
+
+/**
+ * @brief Turn OFF given LED/LEDs
+ * 
+ * @param1  Microcontroller port letter: PORT_x [x = A, B or C]
+ * @param2  LED number: LEDx [x = 0...7]
+ * 
+ * @return void
+ */
+void LED_OFF(port_letter_t PORT_x, led_number_t LEDx);
