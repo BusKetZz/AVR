@@ -60,3 +60,43 @@ void LED_Blink(port_letter_t PORT_x, led_number_t LEDx)
             break;
     }
 }
+
+
+
+void LED_ON(port_letter_t PORT_x, led_number_t LEDx)
+{
+    switch(PORT_x)
+    {
+        case 'B':
+            PORTB |= LEDx;
+            break;
+        
+        case 'C':
+            PORTC |= LEDx;
+            break;
+        
+        case 'D':
+            PORTD |= LEDx;
+            break;
+    }
+}
+
+
+
+void LED_OFF(port_letter_t PORT_x, led_number_t LEDx)
+{
+    switch(PORT_x)
+    {
+        case 'B':
+            PORTB &= ~LEDx;
+            break;
+        
+        case 'C':
+            PORTC &= ~LEDx;
+            break;
+        
+        case 'D':
+            PORTD &= ~LEDx;
+            break;
+    }
+}
