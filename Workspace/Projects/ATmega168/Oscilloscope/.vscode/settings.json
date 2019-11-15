@@ -1,0 +1,9 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "led.h": "c",
+        "io.h": "c",
+        "delay_basic.h": "c",
+        "inttypes.h": "c"
+    }
+}
