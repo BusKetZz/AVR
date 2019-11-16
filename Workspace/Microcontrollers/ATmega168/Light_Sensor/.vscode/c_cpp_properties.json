@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "~/opt/AVR/avr-libc-2.0.0/include",
+                "~/opt/AVR/avr-libc-2.0.0/include/avr",
+                "~/MORDOR/Embedded_Systems/AVR/Workspace/Projects/ATmega168/Light_Sensor/Include"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "~/opt/AVR/avr8-gnu-toolchain-darwin_x86_64/bin",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
