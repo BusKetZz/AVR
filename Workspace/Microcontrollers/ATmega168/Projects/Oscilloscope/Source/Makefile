@@ -4,7 +4,7 @@
 ############------------------------------------------------------############
 
 ## Project name
-PROJECT_NAME = NightLight
+PROJECT_NAME = Oscilloscope
 
 ## Set used microcontroller and its operational frequency
 MCU = atmega168p
