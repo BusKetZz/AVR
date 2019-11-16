@@ -14,14 +14,14 @@ F_CPU = 1000000
 MAIN = main.c
 
 ## Additional local source files
-LOCAL_SOURCE_FILES = ADC.c LED.c
+LOCAL_SOURCE_FILES = 
 
 ## Additional external source files
-EXTRA_SOURCE_DIRECTORY = 
-EXTRA_SOURCE_FILES =
+EXTRA_SOURCE_DIRECTORY = ../../../Source/
+EXTRA_SOURCE_FILES = ADC.c LED.c
 
 ## Header files
-HEADER_FILES = ../Include
+HEADER_FILES = ../../../Include
 
 
 
@@ -55,13 +55,13 @@ CFLAGS += -std=gnu99
 ## Merge source files together
 EXTRA_SOURCE = ${addprefix ${EXTRA_SOURCE_DIRECTORY}, ${EXTRA_SOURCE_FILES}}
 SOURCE = ${MAIN}
-SOURCE += ${EXTRA_SOURCE}
 SOURCE += ${LOCAL_SOURCE_FILES}
+SOURCE += ${EXTRA_SOURCE}
 
 ## Generic Makefile routines
 all:
 	mkdir -p ../Build
-	${CC} ${CFLAGS} ${SOURCE} ${EXTRA_SOURCE} --output ../Build/${PROJECT_NAME}.bin
+	${CC} ${CFLAGS} ${SOURCE} --output ../Build/${PROJECT_NAME}.bin
 	${OBJCOPY} -j .text -j .data -O ihex ../Build/${PROJECT_NAME}.bin \
     ../Build/${PROJECT_NAME}.hex
 
