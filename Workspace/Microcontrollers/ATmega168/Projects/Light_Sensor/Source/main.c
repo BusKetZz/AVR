@@ -18,12 +18,12 @@ int main(void)
     uint8_t ledValue = 0;
     uint16_t adcValue = 0;
 
-    ADC0_Init();
+    ADC_Init_SingleConversion(ADC_CHANNEL_0, CLOCK_PRESCALER_16);
     LED_Init(PORT_B, ALL_LEDS);
 
     while(1)
     {
-        ADC0_MakeSingleConversion();
+        ADC_MakeSingleConversion();
         adcValue = ADC;
 
         ledValue = (adcValue >> 7);
