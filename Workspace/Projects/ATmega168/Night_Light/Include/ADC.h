@@ -20,6 +20,20 @@
 /*                              PUBLIC DEFINES                               */
 /*****************************************************************************/
 
+#define ADC_CHANNEL_0   (uint8_t)0
+#define ADC_CHANNEL_1   (uint8_t)1
+#define ADC_CHANNEL_2   (uint8_t)2
+#define ADC_CHANNEL_3   (uint8_t)3
+#define ADC_CHANNEL_4   (uint8_t)4
+#define ADC_CHANNEL_5   (uint8_t)5
+#define ADC_CHANNEL_6   (uint8_t)6
+#define ADC_CHANNEL_7   (uint8_t)7
+
+#define CLOCK_PRESCALER_4   (uint8_t)(1 << ADPS1)
+#define CLOCK_PRESCALER_8   (uint8_t)((1 << ADPS1) | (1 << ADPS0))
+#define CLOCK_PRESCALER_16  (uint8_t)(1 << ADPS2)
+#define CLOCK_PRESCALER_32  (uint8_t)((1 << ADPS2) | (1 << ADPS0))
+
 
 
 /*****************************************************************************/
@@ -27,25 +41,31 @@
 /*****************************************************************************/
 
 /**
- * @brief Initialize ADC0 with /16 clock prescaler and AVCC reference voltage
+ * @brief Initialize ADC on selected channel with given clock prescaler and 
+ *        AVCC reference voltage
  * 
- * @param void
+ * @param channel:        ADC conversion channel - ADC_CHANNEL_x [x = 0...7]
+ * @oaram clockPrescaler: ADC clock divider - CLOCK_PRESCALER_x [x = 4, 8, 16,
+ *                        32]
  * 
  * @return void
  */ 
-void ADC0_Init(void);
+void ADC_Init_SingleConversion(uint8_t channel, uint8_t clockPrescaler);
 
 
 
 /**
- * @brief Initialize ADC0 with /8 clock prescaler, AVCC reference voltage,
- *        ADC left adjust result in the 'freerunning' (continuous) mode
+ * @brief Initialize ADC on selected channel with given clock prescaler, 
+ *        AVCC reference voltage, ADC left adjust result
+ *        in the 'freerunning' (continuous) mode
  * 
- * @param void
+ * @param channel:        ADC conversion channel - ADC_CHANNEL_x [x = 0...7]
+ * @oaram clockPrescaler: ADC clock divider - CLOCK_PRESCALER_x [x = 4, 8, 16,
+ *                        32]
  * 
  * @return void
  */
-void ADC0_Init_Freerunning(void); 
+void ADC_Init_Freerunning(uint8_t channel, uint8_t clockPrescaler); 
 
 
 
@@ -56,4 +76,4 @@ void ADC0_Init_Freerunning(void);
  * 
  * @return void
  */
-void ADC0_MakeSingleConversion(void); 
+void ADC_MakeSingleConversion(void); 
