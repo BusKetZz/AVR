@@ -20,7 +20,7 @@
 int main(void)
 {
     USART_Init(BAUD_9600);
-    ADC0_Init_Freerunning();
+    ADC_Init_Freerunning(ADC_CHANNEL_0, CLOCK_PRESCALER_8);
 
     while(1)
     {
