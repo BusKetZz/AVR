@@ -30,3 +30,12 @@ typedef char port_letter_t;
 /*****************************************************************************/
 /*                       PUBLIC FUNCTIONS DECLARATIONS                       */
 /*****************************************************************************/
+
+/**
+ * @brief  Initialize 7-segment display on a given microcontroller port
+ * 
+ * @param  Microcontroller port letter: PORT_x [x = 'A', 'B' or 'C']
+ * 
+ * @return  void
+ */
+void SegmentDisplay_Init(port_letter_t PORT_x);
