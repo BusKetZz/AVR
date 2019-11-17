@@ -8,7 +8,7 @@
 
 #define __AVR_ATmega168__
 
-#include "7-Segment_Display.h"
+#include "Segment_Display.h"
 
 
 
