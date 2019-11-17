@@ -66,3 +66,21 @@ static const uint8_t numberToDisplay[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE,
 /*****************************************************************************/
 /*                       PUBLIC FUNCTIONS DEFINITIONS                        */
 /*****************************************************************************/
+
+void SegmentDisplay_Init(port_letter_t PORT_x)
+{
+    switch(PORT_x)
+    {
+        case 'B':
+            DDRB |= 0xFF;
+            break;
+
+        case 'C':
+            DDRC |= 0xFF;
+            break;
+
+        case 'D':
+            DDRD |= 0xFF;
+            break;
+    }
+}
