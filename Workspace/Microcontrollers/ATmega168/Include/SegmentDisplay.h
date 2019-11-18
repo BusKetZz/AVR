@@ -39,3 +39,15 @@ typedef char port_letter_t;
  * @return  void
  */
 void SegmentDisplay_Init(port_letter_t PORT_x);
+
+
+
+/**
+ * @brief  Display a given digit on a 7-segment display
+ * 
+ * @param1  Microcontroller port letter: PORT_x [x = 'A', 'B' or 'C']
+ * @param2  Digit to display: 0...9
+ * 
+ * @return  void
+ */
+void SegmentDisplay_SetDigit(port_letter_t PORT_x, uint8_t digit);
