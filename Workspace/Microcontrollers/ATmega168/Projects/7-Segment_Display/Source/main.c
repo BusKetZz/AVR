@@ -8,10 +8,9 @@
  *  Date: 08.10.2019
  */
 
-#define __AVR_ATmega168P__
-
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "SegmentDisplay.h"
 
 
 
@@ -19,39 +18,11 @@
 /*                            PRIVATE DEFINES                                */
 /*****************************************************************************/
 
-/* 7-Segment display literal-pin equivalent */
-#define A   (1 << PIN0)
-#define B   (1 << PIN1)
-#define C   (1 << PIN2)
-#define D   (1 << PIN3)
-#define E   (1 << PIN4)
-#define F   (1 << PIN5)
-#define G   (1 << PIN6)
-#define H   (1 << PIN7)
-
-
-/* Numbers to display */
-#define ZERO    (A | B | C | D | E | F)
-#define ONE     (B | C)
-#define TWO     (A | B | G | E | D)
-#define THREE   (A | B | C | D | G)
-#define FOUR    (B | C | F | G)
-#define FIVE    (A | F | G | C | D)
-#define SIX     (A | F | E | D | C | G)
-#define SEVEN   (A | B | C)
-#define EIGHT   (A | B | C | D | E | F | G)
-#define NINE    (A | F | G | B | C | D)
-#define DOT     (H)
-
 
 
 /*****************************************************************************/
 /*                           PRIVATE VARIABLES                               */
 /*****************************************************************************/
-
-static const uint8_t numberToDisplay[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE,
-                                            SIX, SEVEN, EIGHT, NINE};
-volatile static uint8_t numbersCounter;
 
 volatile static uint8_t timerCounter; 
 
@@ -80,14 +51,6 @@ void TIMER1_Init(void)
 
 
 
-void PORTD_Init(void)
-{
-    /* Set all the pins of Port D as an output */ 
-    DDRD |= 0xFF;
-}
-
-
-
 /*****************************************************************************/
 /*                              MAIN PROGRAM                                 */
 /*****************************************************************************/
@@ -95,14 +58,14 @@ void PORTD_Init(void)
 int main(void)
 {   
     TIMER1_Init();
-
-    PORTD_Init();
+    SegmentDisplay_Init(PORT_B);
+    
 
     /* Enable global interrupts */
     sei();
 
     /* Turn on 7-Segment display with default '0' value */
-    PORTD = numberToDisplay[0];
+    SegmentDisplay_SetDigit(PORT_B, 0);
     
     while(1)
     {
@@ -120,13 +83,15 @@ int main(void)
 
 ISR(TIMER1_OVF_vect)
 {
+    static uint8_t digitToDisplay = 0;
+
     if(timerCounter == 1)
     {
-        if(++numbersCounter > 9)
+        if(++digitToDisplay > 9)
         {
-            numbersCounter = 0;
+            digitToDisplay = 0;
         }
-        PORTD = numberToDisplay[numbersCounter];
+        SegmentDisplay_SetDigit(PORT_B, digitToDisplay);
 
         timerCounter = 0;
     }
