@@ -8,7 +8,7 @@
 
 #define __AVR_ATmega168__
 
-#include "Segment_Display.h"
+#include "SegmentDisplay.h"
 
 
 
@@ -52,7 +52,7 @@
 /*                           PRIVATE VARIABLES                               */
 /*****************************************************************************/
 
-static const uint8_t numberToDisplay[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE,
+static const uint8_t digitToDisplay[10] = {ZERO, ONE, TWO, THREE, FOUR, FIVE,
                                             SIX, SEVEN, EIGHT, NINE};
 
 
@@ -81,6 +81,26 @@ void SegmentDisplay_Init(port_letter_t PORT_x)
 
         case 'D':
             DDRD |= 0xFF;
+            break;
+    }
+}
+
+
+
+void SegmentDisplay_SetDigit(port_letter_t PORT_x, uint8_t digit)
+{
+    switch(PORT_x)
+    {
+        case 'B':
+            PORTB |= digitToDisplay[digit];
+            break;
+
+        case 'C':
+            PORTC |= digitToDisplay[digit];
+            break;
+
+        case 'D':
+            PORTD |= digitToDisplay[digit];
             break;
     }
 }
