@@ -1,5 +1,5 @@
 /**
- * File: 7-Segment_Display.c
+ * File: SegmentDisplay.c
  * 
  * Author: Jakub Standarski
  * 
