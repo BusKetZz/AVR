@@ -44,6 +44,19 @@ void USART_TransmitByte(char byteToTransmit)
 
 
 
+void USART_TransmitString(const char *stringToTransmit)
+{
+    uint8_t i = 0;
+
+    while(stringToTransmit[i])
+    {
+        USART_TransmitByte(stringToTransmit[i]);
+        i++;
+    }
+}
+
+
+
 char USART_ReceiveByte(void)
 {
     /* Wait for data to be received */
