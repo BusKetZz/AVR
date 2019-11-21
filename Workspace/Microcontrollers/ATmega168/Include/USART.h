@@ -24,21 +24,21 @@
 /*****************************************************************************/
 
 /**
- * @brief Initialize USART
+ * @brief  Initialize USART
  * 
- * @param1 baud rate: value placed into UBRR0H and UBRR0L registers, depends on
- *                    oscillator frequency
+ * @param1  Baud rate: value placed into UBRR0H and UBRR0L registers, depends on
+ *                     oscillator frequency
  * 
- * @return void 
+ * @return  void 
  */ 
 void USART_Init(uint16_t baudrate);
 
 
 
 /**
- * @brief Send byte over USART (blocking mode)
+ * @brief  Send byte over USART (blocking mode)
  * 
- * @param1 byte to send over USART 
+ * @param1  Byte to send over USART 
  * 
  * @return void 
  */
@@ -47,10 +47,21 @@ void USART_TransmitByte(char byteToTransmit);
 
 
 /**
- * @brief Read byte from the USART data register 
+ * @brief  Send string over USART (blocking mode)
  * 
- * @param void
+ * @param1  String (array) to send over USART
  * 
- * @return one byte of type 'char'
+ * @return  void
+ */
+void USART_TransmitString(const char *stringToTransmit);
+
+
+
+/**
+ * @brief  Read byte from the USART data register 
+ * 
+ * @param  void
+ * 
+ * @return  One byte of type 'char'
  */ 
 char USART_ReceiveByte(void);
