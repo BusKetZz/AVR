@@ -29,7 +29,7 @@
 #define TIMER0_CLOCK_PRESCALER_64       ((1 << CS01) | (1 << CS00))
 #define TIMER0_CLOCK_PRESCALER_256      (1 << CS02)
 #define TIMER0_CLOCK_PRESCALER_1024     ((1 << CS02) | (1 << CS00)
-)
+
 
 /* Timer1 compare output modes */
 #define TIMER1_NORMAL_PORT_OPERATION    (uint8_t)0x00
@@ -48,7 +48,7 @@
 /*****************************************************************************/
 
 /**
- * @brief  Timer 0 (8-bit) initialization
+ * @brief  Timer0 (8-bit) initialization
  * 
  * @param1  Timer operation mode [compareOutputMode = NORMAL_PORT_OPERATION,
  *                                TOGGLE_OC0A_ON_COMPARE_MATCH, 
@@ -66,7 +66,7 @@ void Timer0_Init(uint8_t compareOutputMode, uint8_t clockPrescaler);
 
 
 /**
- * @brief  Timer 1 (16-bit) initialization
+ * @brief  Timer1 (16-bit) initialization
  * 
  * @param1
  * 
@@ -75,3 +75,15 @@ void Timer0_Init(uint8_t compareOutputMode, uint8_t clockPrescaler);
  * @return  void
  */
 void Timer1_Init(uint8_t compareOutputMode, uint8_t clockPrescaler);
+
+
+
+/**
+ * @brief  Timer1 random time delay. It generates time delay between 0 to 
+ *         ~2.5[s].
+ * 
+ * @param  void
+ * 
+ * @return  void
+ */ 
+void Timer1_RandomDelay(void);
