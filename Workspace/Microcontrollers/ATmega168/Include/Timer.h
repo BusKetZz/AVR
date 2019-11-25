@@ -20,6 +20,27 @@
 /*                              PUBLIC DEFINES                               */
 /*****************************************************************************/
 
+/* Timer0 compare output modes */
+#define TIMER0_NORMAL_PORT_OPERATION    (uint8_t)0x00
+
+/* Timer0 clock prescalers */
+#define TIMER0_CLOCK_PRESCALER_1        (1 << CS00)
+#define TIMER0_CLOCK_PRESCALER_8        (1 << CS01)
+#define TIMER0_CLOCK_PRESCALER_64       ((1 << CS01) | (1 << CS00))
+#define TIMER0_CLOCK_PRESCALER_256      (1 << CS02)
+#define TIMER0_CLOCK_PRESCALER_1024     ((1 << CS02) | (1 << CS00)
+)
+
+/* Timer1 compare output modes */
+#define TIMER1_NORMAL_PORT_OPERATION    (uint8_t)0x00
+
+/* Timer1 clock prescalers */
+#define TIMER1_CLOCK_PRESCALER_1    (1 << CS10)
+#define TIMER1_CLOCK_PRESCALER_8    (1 << CS11)
+#define TIMER1_CLOCK_PRESCALER_64   ((1 << CS11) | (1 << CS10))
+#define TIMER1_CLOCK_PRESCALER_256  (1 << CS12)
+#define TIMER1_CLOCK_PRESCALER_1024 ((1 << CS12) | (1 << CS10))
+
 
 
 /*****************************************************************************/
