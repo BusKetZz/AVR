@@ -10,6 +10,8 @@
 
 #include "Timer.h"
 
+#include <util/delay.h>
+
 
 
 /*****************************************************************************/
@@ -30,3 +32,17 @@ void Timer1_Init(uint8_t compareOutputMode, uint8_t clockPrescaler)
     TCCR1B |= clockPrescaler;
 }
 
+
+
+void Timer1_RandomDelay(void)
+{
+    uint8_t randomTime;
+
+    _delay_ms(1000);
+    randomTime = (uint8_t)TCNT1;
+
+    while(--randomTime)
+    {
+        _delay_ms(10);
+    }
+}
