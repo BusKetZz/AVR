@@ -18,13 +18,15 @@
 
 void Timer0_Init(uint8_t compareOutputMode, uint8_t clockPrescaler)
 {
-    /* TODO */
+    TCCR0A |= compareOutputMode;
+    TCCR0B |= clockPrescaler;
 }
 
 
 
 void Timer1_Init(uint8_t compareOutputMode, uint8_t clockPrescaler)
 {
-    
+    TCCR1A |= compareOutputMode;
+    TCCR1B |= clockPrescaler;
 }
 
