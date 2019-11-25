@@ -23,6 +23,10 @@ typedef char port_letter_t;
 /*                              PUBLIC DEFINES                               */
 /*****************************************************************************/
 
+#define PORT_B  (port_letter_t)('B')
+#define PORT_C  (port_letter_t)('C')
+#define PORT_D  (port_letter_t)('D')
+
 #define BUTTON0 (button_number_t)(1 << 0)
 #define BUTTON1 (button_number_t)(1 << 1)
 #define BUTTON2 (button_number_t)(1 << 2)
@@ -33,9 +37,22 @@ typedef char port_letter_t;
 #define BUTTON7 (button_number_t)(1 << 7)
 
 
-#define PORT_B  (port_letter_t)('B')
-#define PORT_C  (port_letter_t)('C')
-#define PORT_D  (port_letter_t)('D')
+#define BUTTON_PORT_B   PORTB
+#define BUTTON_PORT_C   PORTC
+#define BUTTON_PORT_D   PORTD
+
+#define BUTTON_PIN_B    PINB
+#define BUTTON_PIN_C    PINC
+#define BUTTON_PIN_D    PIND
+
+#define BUTTON_PC0      PC0
+#define BUTTON_PC1      PC1
+#define BUTTON_PC2      PC2
+#define BUTTON_PC3      PC3
+#define BUTTON_PC4      PC4
+#define BUTTON_PC5      PC5
+#define BUTTON_PC6      PC6
+
 
 
 
