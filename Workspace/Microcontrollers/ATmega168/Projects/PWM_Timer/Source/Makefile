@@ -18,7 +18,7 @@ LOCAL_SOURCE_FILES =
 
 ## Additional external source files
 EXTRA_SOURCE_DIRECTORY = ../../../Source/
-EXTRA_SOURCE_FILES = LED.c USART.c Timer.c
+EXTRA_SOURCE_FILES = LED.c USART.c
 
 ## Header files
 HEADER_FILES = ../../../Include
