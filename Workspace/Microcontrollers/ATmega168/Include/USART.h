@@ -15,7 +15,7 @@
 /*                              PUBLIC DEFINES                               */
 /*****************************************************************************/
 
-#define BAUD_9600   (uint16_t)6
+#define BAUD_9600   (unsigned int)6
 
 
 
@@ -31,7 +31,7 @@
  * 
  * @return  void 
  */ 
-void USART_Init(uint16_t baudrate);
+void USART_Init(unsigned int baudRate);
 
 
 
