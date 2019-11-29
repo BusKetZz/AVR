@@ -43,7 +43,7 @@ void USART_Init(unsigned int baudRate);
  * 
  * @return void 
  */
-void USART_TransmitByte(char byteToTransmit);
+void USART_TransmitByte(uint8_t byteToTransmit);
 
 
 
@@ -65,4 +65,15 @@ void USART_TransmitString(const char *stringToTransmit);
  * 
  * @return  One byte of type 'char'
  */ 
-unsigned char USART_ReceiveByte(void);
+uint8_t USART_ReceiveByte(void);
+
+
+
+/**
+ * @brief  Get a number between 0-255 from the user input
+ * 
+ * @param  void
+ * 
+ * @return (uint8_t) number between 0-255
+ */
+uint8_t USART_GetNumber(void);
