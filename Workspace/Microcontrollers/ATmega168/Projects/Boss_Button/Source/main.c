@@ -23,7 +23,7 @@ int main(void)
 {
     LED_Init(PORT_B, LED0);
     Button_Init(PORT_B, BUTTON1);
-    USART_Init(BAUD_9600);
+    USART_Init(BAUD_4800);
 
     LED_Blink(PORT_B, LED0);
     USART_TransmitByte('0');
