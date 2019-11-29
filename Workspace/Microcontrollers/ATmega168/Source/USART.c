@@ -43,7 +43,7 @@ void USART_Init(unsigned int baudRate)
 
 
 
-void USART_TransmitByte(char byteToTransmit)
+void USART_TransmitByte(uint8_t byteToTransmit)
 {
     /* Wait for empty transmit buffer */
     while(!(UCSR0A & (1 << UDRE0)));
@@ -67,11 +67,31 @@ void USART_TransmitString(const char *stringToTransmit)
 
 
 
-unsigned char USART_ReceiveByte(void)
+uint8_t USART_ReceiveByte(void)
 {
     /* Wait for data to be received */
     while(!(UCSR0A & (1 << RXC0)));
 
     /* Get and return received data from the buffer */
     return UDR0;
+}
+
+
+
+uint8_t USART_GetNumber(void) 
+{
+  char hundreds = '0';
+  char tens     = '0';
+  char ones     = '0';
+  char thisChar = '0';
+
+  do {
+    hundreds = tens;
+    tens     = ones;
+    ones     = thisChar;
+    thisChar = USART_ReceiveByte();
+    USART_TransmitByte(thisChar);
+  } while (thisChar != '\r');
+
+  return (100 * (hundreds - '0') + 10 * (tens - '0') + ones - '0');
 }
