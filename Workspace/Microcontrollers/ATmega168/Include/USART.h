@@ -15,6 +15,7 @@
 /*                              PUBLIC DEFINES                               */
 /*****************************************************************************/
 
+#define BAUD_4800   (unsigned int)12
 #define BAUD_9600   (unsigned int)6
 
 
@@ -64,4 +65,4 @@ void USART_TransmitString(const char *stringToTransmit);
  * 
  * @return  One byte of type 'char'
  */ 
-char USART_ReceiveByte(void);
+unsigned char USART_ReceiveByte(void);
