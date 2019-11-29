@@ -39,7 +39,7 @@ int main(void)
     Button_Init(PORT_C, BUTTON5);
     LED_Init(PORT_B, ALL_LEDS);
     Timer1_Init(TIMER1_NORMAL_PORT_OPERATION, TIMER1_CLOCK_PRESCALER_64);
-    USART_Init(BAUD_9600);
+    USART_Init(BAUD_4800);
     
 
     USART_TransmitString("\r\n!!!REACTION TIMER!!!\r\n");
