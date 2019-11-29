@@ -6,9 +6,8 @@
  * Date: 04.11.2019
  */
 
-#define __AVR_ATmega168__
-
 #include "USART.h"
+#include "Macros.h"
 
 #include <avr/io.h>
 
@@ -21,15 +20,25 @@
 
 void USART_Init(unsigned int baudRate)
 {
+    CLEAR_BIT(UCSR0A, U2X0);       /* Double Transmission Speed disabled     */
+    CLEAR_BIT(UCSR0A, MPCM0);      /* Multi-processor Communication Mode  
+                                      disabled                               */
+
+    SET_BIT(UCSR0B, RXEN0);        /* Receiver enabled                       */
+    SET_BIT(UCSR0B, TXEN0);        /* Transmitter enabled                    */
+    CLEAR_BIT(UCSR0B, UCSZ02);     /* 8-bit Character Size                   */
+
+    CLEAR_BIT(UCSR0C, UMSEL00);    /* Asynchronous USART Mode                */
+    CLEAR_BIT(UCSR0C, UMSEL01);    /* Asynchronous USART Mode                */
+    CLEAR_BIT(UCSR0C, UPM00);      /* Parity Mode disabled                   */
+    CLEAR_BIT(UCSR0C, UPM01);      /* Parity Mode disabled                   */
+    CLEAR_BIT(UCSR0C, USBS0);      /* 1 Stop Bit                             */
+    SET_BIT(UCSR0C, UCSZ01);       /* 8-bit Character Size                   */
+    SET_BIT(UCSR0C, UCSZ00);       /* 8-bit Character Size                   */
+
     /* Set baud rate */
-    UBRR0H |= (unsigned char)(baudRate >> 8);
-    UBRR0L |= (unsigned char)baudRate;
-
-    /* Enable receiver and transmitter */
-    UCSR0B = ((1 << RXEN0) | (1 << TXEN0));
-
-    /* Set frame format: 8 data bits, 1 stop bit, no parity */
-    UCSR0C = ((1 << UCSZ01) | (1 << UCSZ00));
+    UBRR0H = (unsigned char)(baudRate >> 8);
+    UBRR0L = (unsigned char)baudRate;
 }
 
 
@@ -58,7 +67,7 @@ void USART_TransmitString(const char *stringToTransmit)
 
 
 
-char USART_ReceiveByte(void)
+unsigned char USART_ReceiveByte(void)
 {
     /* Wait for data to be received */
     while(!(UCSR0A & (1 << RXC0)));
