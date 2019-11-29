@@ -6,8 +6,6 @@
  * Date: 04.11.2019
  */
 
-#define __AVR_ATmega168__
-
 #include "LED.h"
 #include <util/delay.h>
 
