@@ -43,6 +43,14 @@ void USART_Init(unsigned int baudRate)
 
 
 
+void USART_Interrupt_RX_TX_Init(void)
+{
+    SET_BIT(UCSR0B, RXCIE0);
+    SET_BIT(UCSR0B, TXCIE0);
+}
+
+
+
 void USART_TransmitByte(uint8_t byteToTransmit)
 {
     /* Wait for empty transmit buffer */
