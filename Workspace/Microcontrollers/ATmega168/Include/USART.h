@@ -25,7 +25,7 @@
 /*****************************************************************************/
 
 /**
- * @brief  Initialize USART
+ * @brief  Initialize generic USART functionalities
  * 
  * @param1  Baud rate: value placed into UBRR0H and UBRR0L registers, depends on
  *                     oscillator frequency
@@ -33,6 +33,17 @@
  * @return  void 
  */ 
 void USART_Init(unsigned int baudRate);
+
+
+
+/**
+ * @brief Initialize USART RX and TX interrupts 
+ * 
+ * @param  void
+ * 
+ * @return  void
+ */
+void USART_Interrupt_RX_TX_Init(void);
 
 
 
