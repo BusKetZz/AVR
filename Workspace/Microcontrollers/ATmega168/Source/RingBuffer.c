@@ -46,3 +46,34 @@ static struct ring_buffer_t ringBuffer[RING_BUFFERS_AMOUNT];
 /*                       PUBLIC FUNCTIONS DEFINITIONS                        */
 /*****************************************************************************/
 
+int RingBuffer_Init(ring_buffer_descriptor_t *descriptor, 
+                    ring_buffer_attributes_t *attributes)
+{
+    static uint8_t usedRingBuffers = 0;
+    int error = -1;
+
+    if((usedRingBuffers < RING_BUFFERS_AMOUNT) && (descriptor != NULL) && 
+       (attributes != NULL))
+    {
+        if((attributes->buffer != NULL) && (attributes->sizeOfElement > 0))
+        {
+            /* Check that number of elements in a ring buffer is power of 2 */
+            if(((attributes->numberOfElements - 1) & 
+                 attributes->numberOfElements) == 0)
+            {
+                ringBuffer[usedRingBuffers].head = 0;
+                ringBuffer[usedRingBuffers].tail = 0;
+                ringBuffer[usedRingBuffers].buffer = attributes->buffer;
+                ringBuffer[usedRingBuffers].sizeOfElement = 
+                attributes->sizeOfElement;
+                ringBuffer[usedRingBuffers].numberOfElements =
+                attributes->numberOfElements;
+
+                *descriptor = usedRingBuffers++;
+                error = 0;
+            }
+        }
+    }
+
+    return error;
+}
