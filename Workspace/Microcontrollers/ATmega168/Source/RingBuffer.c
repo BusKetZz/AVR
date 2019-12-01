@@ -9,6 +9,7 @@
 #include "RingBuffer.h"
 
 #include <stdint.h>
+#include <string.h>
 
 
 
@@ -72,13 +73,13 @@ static inline int RingBuffer_IsEmpty(struct ring_buffer_t *ringBuffer)
 /*                       PUBLIC FUNCTIONS DEFINITIONS                        */
 /*****************************************************************************/
 
-int RingBuffer_Init(ring_buffer_descriptor_t *descriptor, 
+int RingBuffer_Init(ring_buffer_indexer_t *indexer, 
                     ring_buffer_attributes_t *attributes)
 {
     static uint8_t usedRingBuffers = 0;
     int error = -1;
 
-    if((usedRingBuffers < RING_BUFFERS_AMOUNT) && (descriptor != NULL) && 
+    if((usedRingBuffers < RING_BUFFERS_AMOUNT) && (indexer != NULL) && 
        (attributes != NULL))
     {
         if((attributes->buffer != NULL) && (attributes->sizeOfElement > 0))
@@ -95,7 +96,7 @@ int RingBuffer_Init(ring_buffer_descriptor_t *descriptor,
                 ringBuffer[usedRingBuffers].numberOfElements =
                 attributes->numberOfElements;
 
-                *descriptor = usedRingBuffers++;
+                *indexer = usedRingBuffers++;
                 error = 0;
             }
         }
@@ -106,3 +107,24 @@ int RingBuffer_Init(ring_buffer_descriptor_t *descriptor,
 
 
 
+int RingBuffer_Put(ring_buffer_indexer_t indexer, const void *data)
+{
+    int error = 0;
+
+    if((indexer < RING_BUFFERS_AMOUNT) && 
+        (RingBuffer_IsFull(&ringBuffer[indexer]) == 0))
+    {
+        const uint8_t offset = (ringBuffer[indexer].head & 
+                               (ringBuffer[indexer].numberOfElements - 1)) *
+                                ringBuffer[indexer].sizeOfElement;
+        memcpy(&(ringBuffer[indexer].buffer[offset]), data, 
+                 ringBuffer[indexer].sizeOfElement);
+        ringBuffer[indexer].head++;
+    }
+    else
+    {
+        error = -1;
+    }
+
+    return error;
+}
