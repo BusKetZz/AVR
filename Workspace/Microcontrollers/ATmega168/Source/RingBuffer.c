@@ -43,6 +43,25 @@ static struct ring_buffer_t ringBuffer[RING_BUFFERS_AMOUNT];
 
 
 /*****************************************************************************/
+/*                       PRIVATE FUNCTIONS DEFINITIONS                       */
+/*****************************************************************************/
+
+static inline int RingBuffer_IsFull(struct ring_buffer_t *ringBuffer)
+{
+    return ((ringBuffer->head - ringBuffer->tail) == 
+             ringBuffer->numberOfElements) ? 1 : 0;
+}
+
+
+
+static inline int RingBuffer_IsEmpty(struct ring_buffer_t *ringBuffer)
+{
+    return ((ringBuffer->head - ringBuffer->tail) == 0U) ? 1 : 0;
+}
+
+
+
+/*****************************************************************************/
 /*                       PUBLIC FUNCTIONS DEFINITIONS                        */
 /*****************************************************************************/
 
@@ -77,3 +96,6 @@ int RingBuffer_Init(ring_buffer_descriptor_t *descriptor,
 
     return error;
 }
+
+
+
