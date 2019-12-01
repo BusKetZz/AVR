@@ -72,4 +72,17 @@ int RingBuffer_Put(ring_buffer_indexer_t indexer, const void *data);
 
 
 
+/**
+ * @brief  Get an element from the ring buffer
+ * 
+ * @param1  (unsigned int) indexer: index of ring buffer
+ * @param2  (void) *data: pointer to the place where to copy data from the 
+ *                        ring buffer
+ * 
+ * @return  (int) 0 if okey, -1 if error
+ */
+int RingBuffer_Get(ring_buffer_indexer_t indexer, void *data);
+
+
+
 #endif /* RINGBUFFER_H */
