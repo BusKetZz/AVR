@@ -18,6 +18,13 @@
 
 #define RING_BUFFERS_AMOUNT     1
 
+#define FULL        1
+#define NOT_FULL    0
+
+#define EMPTY       1
+#define NOT_EMPTY   0
+
+
 
 /*****************************************************************************/
 /*                           PRIVATE STRUCTURES                              */
@@ -49,14 +56,14 @@ static struct ring_buffer_t ringBuffer[RING_BUFFERS_AMOUNT];
 static inline int RingBuffer_IsFull(struct ring_buffer_t *ringBuffer)
 {
     return ((ringBuffer->head - ringBuffer->tail) == 
-             ringBuffer->numberOfElements) ? 1 : 0;
+             ringBuffer->numberOfElements) ? FULL : NOT_FULL;
 }
 
 
 
 static inline int RingBuffer_IsEmpty(struct ring_buffer_t *ringBuffer)
 {
-    return ((ringBuffer->head - ringBuffer->tail) == 0U) ? 1 : 0;
+    return ((ringBuffer->head - ringBuffer->tail) == 0U) ? EMPTY : NOT_EMPTY;
 }
 
 
