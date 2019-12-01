@@ -143,7 +143,7 @@ int RingBuffer_Get(ring_buffer_indexer_t indexer, void *data)
                                 ringBuffer[indexer].sizeOfElement;
         memcpy(data, &(ringBuffer[indexer].buffer[offset]), 
                ringBuffer[indexer].sizeOfElement);
-        ringBuffer[indexer].head++;
+        ringBuffer[indexer].tail++;
     }
     else
     {
