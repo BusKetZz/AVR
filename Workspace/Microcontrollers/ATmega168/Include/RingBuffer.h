@@ -45,6 +45,18 @@ typedef struct
 /*                       PUBLIC FUNCTIONS DECLARATIONS                       */
 /*****************************************************************************/
 
+/**
+ * @brief  Initialize ring buffer
+ * 
+ * @param1  (unsigned int) *descriptor: pointer to the index of an initialized
+ *                                      ring buffer
+ * @param2  (struct) *attributes: pointer to structure of ring buffer 
+ *                                attributes
+ * 
+ * @return  (int) 0 if okey, -1 if error
+ */
+int RingBuffer_Init(ring_buffer_descriptor_t *descriptor, 
+                    ring_buffer_attributes_t *attributes);
 
 
 
