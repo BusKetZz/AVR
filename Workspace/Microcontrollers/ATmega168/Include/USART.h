@@ -37,13 +37,24 @@ void USART_Init(unsigned int baudRate);
 
 
 /**
- * @brief Initialize USART RX and TX interrupts 
+ * @brief Initialize USART RX interrupt
  * 
  * @param  void
  * 
  * @return  void
  */
-void USART_Interrupt_RX_TX_Init(void);
+void USART_Interrupt_RX_Init(void);
+
+
+
+/**
+ * @brief Initialize USART TX interrupt
+ * 
+ * @param  void
+ * 
+ * @return  void
+ */
+void USART_Interrupt_TX_Init(void);
 
 
 
