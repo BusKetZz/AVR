@@ -43,9 +43,15 @@ void USART_Init(unsigned int baudRate)
 
 
 
-void USART_Interrupt_RX_TX_Init(void)
+void USART_Interrupt_RX_Init(void)
 {
     SET_BIT(UCSR0B, RXCIE0);
+}
+
+
+
+void USART_Interrupt_TX_Init(void)
+{
     SET_BIT(UCSR0B, TXCIE0);
 }
 
