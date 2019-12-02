@@ -120,7 +120,7 @@ int RingBuffer_Put(ring_buffer_indexer_t indexer, const void *data)
                                ) * arrayOfRingBuffers[indexer].sizeOfElement;
 
         memcpy(&(arrayOfRingBuffers[indexer].buffer[offset]), data, 
-               arrayRingBuffers[indexer].sizeOfElement);
+               arrayOfRingBuffers[indexer].sizeOfElement);
 
         arrayOfRingBuffers[indexer].head++;
     }
@@ -139,7 +139,7 @@ int RingBuffer_Get(ring_buffer_indexer_t indexer, void *data)
     int error = 0;
 
     if((indexer < RING_BUFFERS_AMOUNT) && 
-       (RingBuffer_IsEmpty(&ringBuffer[indexer]) == 0))
+       (RingBuffer_IsEmpty(&arrayOfRingBuffers[indexer]) == 0))
     {
         const uint8_t offset = (arrayOfRingBuffers[indexer].tail & 
                                (arrayOfRingBuffers[indexer].numberOfElements-1)
