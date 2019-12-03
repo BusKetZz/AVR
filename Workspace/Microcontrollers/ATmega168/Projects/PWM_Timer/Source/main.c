@@ -19,6 +19,8 @@
 /*                              PRIVATE DEFINES                              */
 /*****************************************************************************/
 
+#define PWM_DUTY_CYCLE    10U
+
 #define LED_DDRB    DDRB
 #define LED1        (1 << PB1)
 #define LED2        (1 << PB2)
@@ -30,7 +32,7 @@
 /*                      PRIVATE FUNCTIONS DECLARATIONS                       */
 /*****************************************************************************/
 
-static void Timer1_Timer2_Init(void);
+static void Timer1_Timer2_PWM_Init(void);
 static inline void LED_DDRB_Init(void);
 
 
@@ -41,21 +43,12 @@ static inline void LED_DDRB_Init(void);
 
 int main(void)
 {
-    uint8_t pwmDutyCycle;
-
     LED_DDRB_Init();
-    Timer1_Timer2_Init();
-    USART_Init(BAUD_9600);
-
-    USART_TransmitString("-- PWM Timer example with LEDs --\r\n");
+    Timer1_Timer2_PWM_Init();
 
     while(1)
     {
-        USART_TransmitString("\r\nEnter PWM duty cycle (0-255): ");
-        pwmDutyCycle = (uint8_t)USART_ReceiveByte();
-        OCR2A = OCR1B;
-        OCR1B = OCR1A;
-        OCR1A = pwmDutyCycle;
+        
     }
 
     return 0;
@@ -67,7 +60,7 @@ int main(void)
 /*                       PRIVATE FUNCTIONS DEFINITIONS                       */
 /*****************************************************************************/
 
-static void Timer1_Timer2_Init(void)
+static void Timer1_Timer2_PWM_Init(void)
 {
     /* Timer1 - channels: A, B */
     TCCR1A |= (1 << WGM10);         /* Fast PWM, 8-bit              */
@@ -81,6 +74,10 @@ static void Timer1_Timer2_Init(void)
     TCCR2A |= (1 << WGM21);         /* Fast PWM                     */
     TCCR2B |= (1 << CS21);          /* PWM frequency = F_CPU/8/256  */
     TCCR2A |= (1 << COM2A1);        /* PWM output on OC2A - PB3     */
+
+    OCR2A = PWM_DUTY_CYCLE;
+    OCR1B = PWM_DUTY_CYCLE;
+    OCR1A = PWM_DUTY_CYCLE;
 }
 
 
